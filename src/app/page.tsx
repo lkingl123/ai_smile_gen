@@ -58,35 +58,30 @@ export default function HomePage() {
       {/* Header */}
       <Header />
 
-      {/* Hero Section */}
-      <motion.div
-        className="max-w-5xl w-full p-10 text-center flex flex-col items-center mt-12"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-      >
-        <h2 className="text-6xl font-extrabold text-gray-800 mb-6 leading-tight drop-shadow-lg">
-          Discover Your <span className="text-blue-600">Perfect Smile</span>
-        </h2>
-        <p className="text-xl text-gray-700 mb-8 max-w-3xl">
-          Upload your photo to visualize how a new set of teeth can transform your smile.
-          Experience cutting-edge dental simulation with minimal effort.
-        </p>
-        <div className="flex flex-wrap justify-center gap-6">
-          <Link
-            href="/auth/signup"
-            className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-4 px-8 rounded-full shadow-lg transform transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-105"
-          >
-            Get Started
-          </Link>
-          <Link
-            href="/features"
-            className="bg-white text-blue-600 font-semibold py-4 px-8 rounded-full shadow-md border border-blue-600 transition duration-300 ease-in-out hover:bg-blue-50 transform hover:-translate-y-1 hover:scale-105"
-          >
-            Learn More
-          </Link>
-        </div>
-      </motion.div>
+{/* Hero Section */}
+<motion.div
+  className="max-w-5xl w-full p-10 text-center flex flex-col items-center mt-12"
+  initial={{ opacity: 0, y: -20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 1 }}
+>
+  <h2 className="text-6xl font-extrabold text-gray-800 mb-6 leading-tight drop-shadow-lg">
+    Upload Your <span className="text-blue-600">Photo</span> to See Your Perfect Smile
+  </h2>
+  <p className="text-xl text-gray-700 mb-8 max-w-3xl">
+    Transform your confidence with a new smile! Simply upload your photo, and
+    we’ll show you a realistic preview of your perfect teeth in seconds.
+  </p>
+  <div className="flex flex-wrap justify-center gap-6">
+    <Link
+      href="/upload"
+      className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-4 px-8 rounded-full shadow-lg transform transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-105"
+    >
+      Upload Photo
+    </Link>
+  </div>
+</motion.div>
+
 
       {/* Features Section */}
       <motion.div
@@ -175,7 +170,7 @@ export default function HomePage() {
           Join thousands of happy patients discovering their perfect smiles with us.
         </p>
         <Link
-          href="/features"
+          href="/auth/signin"
           className="bg-white text-blue-600 font-semibold py-4 px-8 rounded-full shadow-md border border-blue-600 transition duration-300 ease-in-out hover:bg-blue-100 hover:text-blue-700 transform hover:-translate-y-1 hover:scale-105 z-10 relative"
         >
           Get Started

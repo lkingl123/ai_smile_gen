@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
+import Link from "next/link";
 
 export default function Header() {
   return (
@@ -35,6 +35,12 @@ export default function Header() {
           className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-5 rounded-full shadow-md transition duration-300 ease-in-out"
         >
           Sign In
+        </Link>
+        <Link
+          href="/auth/signup"
+          className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-5 rounded-full shadow-lg transition duration-300 ease-in-out"
+        >
+          Sign Up
         </Link>
       </nav>
     </header>
