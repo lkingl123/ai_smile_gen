@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { FirebaseAuthProvider } from "./context/FirebaseAuthContext";
+import SpinnerWrapper from "./components/SpinnerWrapper";
 
 // Font imports
 const geistSans = Geist({
@@ -33,7 +34,7 @@ export default function RootLayout({
         suppressHydrationWarning // Suppresses hydration mismatch warning during development
       >
         {/* Wrap the application with AuthProvider */}
-        <FirebaseAuthProvider>{children}</FirebaseAuthProvider>
+        <SpinnerWrapper><FirebaseAuthProvider>{children}</FirebaseAuthProvider></SpinnerWrapper>
       </body>
     </html>
   );

@@ -16,28 +16,38 @@ export default function SignInPage() {
 
   const router = useRouter();
 
+  // const handleAuth = async () => {
+  //   try {
+  //     setErrorMessage(""); // Clear any previous error messages
+
+  //     if (isSignUp) {
+  //       if (password !== confirmPassword) {
+  //         setErrorMessage("Passwords do not match!");
+  //         return;
+  //       }
+  //       await createUserWithEmailAndPassword(auth, email, password);
+  //       alert("User created successfully!");
+  //     } else {
+  //       await signInWithEmailAndPassword(auth, email, password);
+  //       alert("Logged in successfully!");
+  //       router.push("/dashboard"); // Redirect to the dashboard
+  //     }
+  //   } catch (error) {
+  //     if (error instanceof Error) {
+  //       setErrorMessage(error.message); // Display the error message
+  //     } else {
+  //       setErrorMessage("An unexpected error occurred.");
+  //     }
+  //   }
+  // };
+
   const handleAuth = async () => {
     try {
-      setErrorMessage(""); // Clear any previous error messages
-
-      if (isSignUp) {
-        if (password !== confirmPassword) {
-          setErrorMessage("Passwords do not match!");
-          return;
-        }
-        await createUserWithEmailAndPassword(auth, email, password);
-        alert("User created successfully!");
-      } else {
-        await signInWithEmailAndPassword(auth, email, password);
-        alert("Logged in successfully!");
-        router.push("/dashboard"); // Redirect to the dashboard
-      }
+      // Skip authentication and directly redirect to the dashboard
+      alert("Bypassing authentication for testing!");
+      router.push("/dashboard"); // Redirect to the dashboard
     } catch (error) {
-      if (error instanceof Error) {
-        setErrorMessage(error.message); // Display the error message
-      } else {
-        setErrorMessage("An unexpected error occurred.");
-      }
+      setErrorMessage("An unexpected error occurred.");
     }
   };
 
