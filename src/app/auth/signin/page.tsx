@@ -3,16 +3,17 @@
 import { useState } from "react";
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
-import { useAuth } from '../../context/AuthContext';
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
+import Header from "../../components/Header";
+
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState(""); // Confirm password field
   const [isSignUp, setIsSignUp] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const { login } = useAuth(); // Custom auth context
   const router = useRouter();
 
   const handleAuth = async () => {
@@ -20,13 +21,16 @@ export default function SignInPage() {
       setErrorMessage(""); // Clear any previous error messages
 
       if (isSignUp) {
+        if (password !== confirmPassword) {
+          setErrorMessage("Passwords do not match!");
+          return;
+        }
         await createUserWithEmailAndPassword(auth, email, password);
         alert("User created successfully!");
       } else {
         await signInWithEmailAndPassword(auth, email, password);
         alert("Logged in successfully!");
-        login(); // Update custom auth context
-        router.push('/dashboard'); // Redirect to the dashboard
+        router.push("/dashboard"); // Redirect to the dashboard
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -62,6 +66,17 @@ export default function SignInPage() {
             onChange={(e) => setPassword(e.target.value)}
             className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+
+          {/* Confirm Password Input (Only for Sign Up) */}
+          {isSignUp && (
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          )}
 
           {/* Error Message */}
           {errorMessage && (
