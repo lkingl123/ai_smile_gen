@@ -30,14 +30,30 @@
 'use client';
 
 import PhotoUpload from "../components/PhotoUpload";
+import { useRouter } from "next/navigation";
 
 export default function DashboardPage() {
+  const router = useRouter();
+
+  const handleSignOut = () => {
+    // Clear any authentication state and redirect to the login page
+    router.push("/");
+  };
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col items-center p-6">
       {/* Header Section */}
-      <h1 className="text-4xl font-bold text-gray-800 mb-8">
-        Welcome to Your Dashboard
-      </h1>
+      <div className="w-full max-w-3xl flex items-center justify-center relative mb-8">
+        <h1 className="text-4xl font-bold text-gray-800 text-center">
+          Welcome to Your Dashboard
+        </h1>
+        <button
+          onClick={handleSignOut}
+          className="absolute right-0 bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600 transition"
+        >
+          Sign Out
+        </button>
+      </div>
 
       <p className="text-lg text-gray-600 mb-12">
         Upload your photo to visualize your perfect smile!
@@ -45,9 +61,6 @@ export default function DashboardPage() {
 
       {/* Photo Upload Component */}
       <section className="w-full max-w-3xl bg-white p-8 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
-          Upload Photo
-        </h2>
         <PhotoUpload />
       </section>
     </main>
