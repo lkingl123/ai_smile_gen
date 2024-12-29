@@ -6,7 +6,8 @@ import { storage } from "../firebaseConfig";
 import { FaCloudUploadAlt } from "react-icons/fa";
 
 export default function PhotoUpload() {
-  const [image, setImage] = useState<string | null>(null);
+  const [originalImage, setOriginalImage] = useState<string | null>(null); // For uploaded image
+  const [enhancedImage, setEnhancedImage] = useState<string | null>(null); // For processed image
   const [loading, setLoading] = useState(false);
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,6 +17,7 @@ export default function PhotoUpload() {
     setLoading(true);
 
     try {
+      // Upload original image to Firebase Storage
       const storageRef = ref(storage, `uploads/${file.name}`);
       const uploadTask = uploadBytesResumable(storageRef, file);
 
@@ -29,9 +31,13 @@ export default function PhotoUpload() {
         async () => {
           try {
             const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-            console.log("Download URL:", downloadURL); // Debug
-            setImage(downloadURL);
+            console.log("Download URL:", downloadURL);
+            setOriginalImage(downloadURL);
             setLoading(false);
+
+            // Simulate enhanced image processing (replace this with actual API call later)
+            const enhancedURL = `${downloadURL}?enhanced=true`; // Dummy enhanced image
+            setEnhancedImage(enhancedURL);
           } catch (err) {
             console.error("Error fetching download URL:", err);
             setLoading(false);
@@ -75,17 +81,34 @@ export default function PhotoUpload() {
         </div>
       )}
 
-      {/* Uploaded Image Preview */}
-      {image && (
-        <div className="mt-6">
-          <p className="text-center text-gray-600 mb-2">Uploaded Photo:</p>
-          <div className="flex justify-center items-center border border-gray-300 p-4 rounded-lg shadow-lg bg-white">
-            <img
-              src={image}
-              alt="Uploaded Preview"
-              className="max-w-full max-h-64 object-contain rounded"
-            />
+      {/* Side-by-Side Before and After */}
+      {originalImage && (
+        <div className="mt-6 flex justify-center items-center space-x-6">
+          {/* Original Image */}
+          <div className="flex flex-col items-center">
+            <p className="text-center text-gray-600 mb-2">Original Photo:</p>
+            <div className="border border-gray-300 p-4 rounded-lg shadow-lg bg-white">
+              <img
+                src={originalImage}
+                alt="Original"
+                className="max-w-full max-h-64 object-contain rounded"
+              />
+            </div>
           </div>
+
+          {/* Enhanced Image */}
+          {enhancedImage && (
+            <div className="flex flex-col items-center">
+              <p className="text-center text-gray-600 mb-2">Enhanced Photo:</p>
+              <div className="border border-gray-300 p-4 rounded-lg shadow-lg bg-white">
+                <img
+                  src={enhancedImage}
+                  alt="Enhanced"
+                  className="max-w-full max-h-64 object-contain rounded"
+                />
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

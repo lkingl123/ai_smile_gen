@@ -4,14 +4,13 @@ import { useState, useEffect } from "react";
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
 import { useRouter, useSearchParams } from "next/navigation";
-import Header from "../../components/Header";
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState(""); // Confirm password field
   const [isSignUp, setIsSignUp] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -22,48 +21,37 @@ export default function SignInPage() {
     setIsSignUp(signupParam === "true");
   }, [searchParams]);
 
-  // const handleAuth = async () => {
-  //   try {
-  //     setErrorMessage(""); // Clear any previous error messages
-
-  //     if (isSignUp) {
-  //       // Sign Up Logic
-  //       if (password !== confirmPassword) {
-  //         setErrorMessage("Passwords do not match!");
-  //         return;
-  //       }
-  //       await createUserWithEmailAndPassword(auth, email, password);
-  //       alert("User created successfully!");
-  //       router.push("/auth/signin"); // Redirect to Sign In after Sign Up
-  //     } else {
-  //       // Sign In Logic
-  //       await signInWithEmailAndPassword(auth, email, password);
-  //       alert("Logged in successfully!");
-  //       router.push("/dashboard"); // Redirect to the dashboard
-  //     }
-  //   } catch (error) {
-  //     if (error instanceof Error) {
-  //       setErrorMessage(error.message); // Display the error message
-  //     } else {
-  //       setErrorMessage("An unexpected error occurred.");
-  //     }
-  //   }
-  // };
-
-  
   const handleAuth = async () => {
     try {
-      // Skip authentication and directly redirect to the dashboard
-      alert("Bypassing authentication for testing!");
-      router.push("/dashboard"); // Redirect to the dashboard
+      setMessage(null); // Clear any previous messages
+
+      if (isSignUp) {
+        // Sign Up Logic
+        if (password !== confirmPassword) {
+          setMessage({ type: "error", text: "Passwords do not match!" });
+          return;
+        }
+        await createUserWithEmailAndPassword(auth, email, password);
+        setMessage({ type: "success", text: "User created successfully! Redirecting..." });
+        setTimeout(() => router.push("/auth/signin"), 2000); // Redirect to Sign In after 2 seconds
+      } else {
+        // Sign In Logic
+        await signInWithEmailAndPassword(auth, email, password);
+        setMessage({ type: "success", text: "Logged in successfully! Redirecting..." });
+        setTimeout(() => router.push("/dashboard"), 2000); // Redirect to the dashboard after 2 seconds
+      }
     } catch (error) {
-      setErrorMessage("An unexpected error occurred.");
+      if (error instanceof Error) {
+        setMessage({ type: "error", text: error.message });
+      } else {
+        setMessage({ type: "error", text: "An unexpected error occurred." });
+      }
     }
   };
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md relative">
         <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
           {isSignUp ? "Create an Account" : "Sign In to Your Account"}
         </h1>
@@ -98,11 +86,6 @@ export default function SignInPage() {
             />
           )}
 
-          {/* Error Message */}
-          {errorMessage && (
-            <p className="text-red-500 text-sm text-center">{errorMessage}</p>
-          )}
-
           {/* Auth Button */}
           <button
             onClick={handleAuth}
@@ -115,13 +98,24 @@ export default function SignInPage() {
           <button
             onClick={() => {
               setIsSignUp(!isSignUp);
-              setErrorMessage(""); // Clear error message when toggling
+              setMessage(null); // Clear message when toggling
             }}
             className="text-blue-600 underline text-sm text-center"
           >
             {isSignUp ? "Already have an account? Sign In" : "Don't have an account? Sign Up"}
           </button>
         </div>
+
+        {/* Message Box */}
+        {message && (
+          <div
+            className={`mt-4 px-4 py-2 rounded-lg shadow-md text-white text-center ${
+              message.type === "success" ? "bg-green-500" : "bg-red-500"
+            }`}
+          >
+            {message.text}
+          </div>
+        )}
       </div>
     </main>
   );
