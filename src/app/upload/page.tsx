@@ -16,11 +16,6 @@ export default function UploadPage() {
     }
   }, [user, loading, router]);
 
-  // Show a loading state while checking authentication
-  if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
-  }
-
   // Render the upload page for authenticated users
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col items-center">
