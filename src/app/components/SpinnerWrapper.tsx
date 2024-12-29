@@ -15,7 +15,7 @@ export default function SpinnerWrapper({
     setLoading(true); // Trigger spinner on navigation
     const timeout = setTimeout(() => {
       setLoading(false); // Simulated loading duration
-    }, 2000);
+    }, 3000);
     return () => clearTimeout(timeout); // Cleanup timeout
   }, [pathname]); // Re-run effect on route change
 
