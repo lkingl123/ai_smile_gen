@@ -74,7 +74,7 @@ export default function HomePage() {
   </p>
   <div className="flex flex-wrap justify-center gap-6">
     <Link
-      href="/upload"
+      href="/dashboard"
       className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-4 px-8 rounded-full shadow-lg transform transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-105"
     >
       Upload Photo
