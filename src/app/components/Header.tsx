@@ -12,7 +12,7 @@ export default function Header() {
   };
 
   return (
-    <header className="relative z-50 w-full max-w-6xl mx-auto p-4 flex items-center justify-between bg-white/80 backdrop-blur-md shadow-lg rounded-full mt-4">
+    <header className="relative z-50 w-full max-w-6xl mx-auto p-4 flex items-center justify-between bg-white backdrop-blur-md shadow-lg rounded-full mt-4">
       {/* Logo */}
       <h1 className="text-3xl font-bold text-gray-800 tracking-wide">
         Dental<span className="text-blue-600">Simulator</span>
