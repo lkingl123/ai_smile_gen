@@ -170,7 +170,7 @@ export default function HomePage() {
           Join thousands of happy patients discovering their perfect smiles with us.
         </p>
         <Link
-          href="/auth/signin"
+          href="/auth/signup"
           className="bg-white text-blue-600 font-semibold py-4 px-8 rounded-full shadow-md border border-blue-600 transition duration-300 ease-in-out hover:bg-blue-100 hover:text-blue-700 transform hover:-translate-y-1 hover:scale-105 z-10 relative"
         >
           Get Started
