@@ -1,53 +1,57 @@
 'use client';
 
-import { useState, useEffect, Suspense } from "react";
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebaseConfig";
-import { useRouter, useSearchParams } from "next/navigation";
-import { FaHome } from "react-icons/fa";
-import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState, useEffect } from 'react';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../firebaseConfig'; // Adjust path as needed
+import { useRouter, useSearchParams } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
+import { FaHome } from 'react-icons/fa';
 
 function SignInPageContent() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState(""); // Confirm password field
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState(''); // Confirm password field
   const [isSignUp, setIsSignUp] = useState(false);
-  const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(
+    null
+  );
 
   const router = useRouter();
   const searchParams = useSearchParams();
 
   // Check query parameter to toggle Sign Up mode
   useEffect(() => {
-    const signupParam = searchParams.get("signup");
-    setIsSignUp(signupParam === "true");
+    const signupParam = searchParams.get('signup');
+    setIsSignUp(signupParam === 'true');
   }, [searchParams]);
 
-  const handleAuth = async () => {
+  const handleAuth = async (e?: React.FormEvent<HTMLFormElement>) => {
+    if (e) e.preventDefault(); // Prevent form submission refresh
+
     try {
       setMessage(null); // Clear any previous messages
 
       if (isSignUp) {
         // Sign Up Logic
         if (password !== confirmPassword) {
-          setMessage({ type: "error", text: "Passwords do not match!" });
+          setMessage({ type: 'error', text: 'Passwords do not match!' });
           return;
         }
         await createUserWithEmailAndPassword(auth, email, password);
-        setMessage({ type: "success", text: "User created successfully! Redirecting..." });
-        setTimeout(() => router.push("/auth/signin"), 2000); // Redirect to Sign In after 2 seconds
+        setMessage({ type: 'success', text: 'User created successfully! Redirecting...' });
+        setTimeout(() => router.push('/auth/signin'), 2000); // Redirect to Sign In after 2 seconds
       } else {
         // Sign In Logic
         await signInWithEmailAndPassword(auth, email, password);
-        setMessage({ type: "success", text: "Logged in successfully! Redirecting..." });
-        setTimeout(() => router.push("/dashboard"), 2000); // Redirect to the dashboard after 2 seconds
+        setMessage({ type: 'success', text: 'Logged in successfully! Redirecting...' });
+        setTimeout(() => router.push('/dashboard'), 2000); // Redirect to the dashboard after 2 seconds
       }
     } catch (error) {
       if (error instanceof Error) {
-        setMessage({ type: "error", text: error.message });
+        setMessage({ type: 'error', text: error.message });
       } else {
-        setMessage({ type: "error", text: "An unexpected error occurred." });
+        setMessage({ type: 'error', text: 'An unexpected error occurred.' });
       }
     }
   };
@@ -57,21 +61,22 @@ function SignInPageContent() {
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md relative">
         <AnimatePresence mode="wait">
           <motion.div
-            key={isSignUp ? "signUp" : "signIn"}
+            key={isSignUp ? 'signUp' : 'signIn'}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.4, ease: "easeInOut" }}
+            transition={{ duration: 0.4, ease: 'easeInOut' }}
           >
             <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-              {isSignUp ? "Create an Account" : "Sign In to Your Account"}
+              {isSignUp ? 'Create an Account' : 'Sign In to Your Account'}
             </h1>
 
-            <div className="flex flex-col space-y-4">
+            {/* Wrap inputs and button in a form */}
+            <form className="flex flex-col space-y-4" onSubmit={handleAuth}>
               {/* Email Input */}
               <input
                 type="email"
-                placeholder={isSignUp ? "Enter your email" : "Email"}
+                placeholder={isSignUp ? 'Enter your email' : 'Email'}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -80,7 +85,7 @@ function SignInPageContent() {
               {/* Password Input */}
               <input
                 type="password"
-                placeholder={isSignUp ? "Create a password" : "Password"}
+                placeholder={isSignUp ? 'Create a password' : 'Password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -99,18 +104,18 @@ function SignInPageContent() {
 
               {/* Auth Button */}
               <button
-                onClick={handleAuth}
+                type="submit"
                 className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
               >
-                {isSignUp ? "Sign Up" : "Sign In"}
+                {isSignUp ? 'Sign Up' : 'Sign In'}
               </button>
-            </div>
+            </form>
           </motion.div>
         </AnimatePresence>
 
         {/* Toggle Switch for Sign In/Sign Up */}
         <div className="flex items-center justify-center gap-4 mt-6">
-          <span className="text-gray-700">{isSignUp ? "Sign Up" : "Sign In"}</span>
+          <span className="text-gray-700">{isSignUp ? 'Sign Up' : 'Sign In'}</span>
           <label className="relative inline-flex items-center cursor-pointer">
             <input
               type="checkbox"
@@ -138,9 +143,9 @@ function SignInPageContent() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.4, ease: "easeInOut" }}
+            transition={{ duration: 0.4, ease: 'easeInOut' }}
             className={`mt-4 px-4 py-2 rounded-lg shadow-md text-white text-center ${
-              message.type === "success" ? "bg-green-500" : "bg-red-500"
+              message.type === 'success' ? 'bg-green-500' : 'bg-red-500'
             }`}
           >
             {message.text}
@@ -153,8 +158,8 @@ function SignInPageContent() {
 
 export default function SignInPage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <React.Suspense fallback={<div>Loading...</div>}>
       <SignInPageContent />
-    </Suspense>
+    </React.Suspense>
   );
 }
