@@ -1,36 +1,115 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Architecture Overview
 
-## Getting Started
+This application leverages modern web technologies to deliver a seamless and responsive user experience. Below is a detailed breakdown of the architecture:
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## **Frontend**
+- **Framework**: [Next.js](https://nextjs.org/) with **TypeScript**
+  - Ensures fast rendering, scalability, and type-safe development.
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+  - A utility-first CSS framework for custom, responsive designs.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## **Backend and Hosting**
+- **Hosting**: [Vercel](https://vercel.com/)
+  - Handles deployment, serverless functions, and ensures high availability.
+- **Serverless Functions**:
+  - API endpoints for processing user data are hosted and executed via Vercel.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## **Storage and Database**
+- **Firebase Storage**:
+  - Manages uploaded files (e.g., user photos), providing secure and accessible storage.
+- **Firebase Database**:
+  - Stores metadata or application-related information (use either Firestore or Realtime Database).
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## **Authentication**
+- **Firebase Authentication**:
+  - Provides secure user authentication via email/password or third-party providers like Google.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## **User Flow**
+1. **User Interaction**:
+   - Users upload photos through a responsive **Next.js frontend**.
+2. **Image Handling**:
+   - Uploaded files are sent to **Firebase Storage** and stored securely.
+3. **Authentication**:
+   - User logins are managed with **Firebase Authentication**.
+4. **Data Processing**:
+   - Any additional metadata or results are stored in the **Firebase Database**.
+5. **Result Display**:
+   - Processed images or enhanced data are displayed back to the user on the frontend.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## **Technology Summary**
+
+<table>
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Technology</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Frontend</strong></td>
+      <td>Next.js, TypeScript, Tailwind CSS</td>
+    </tr>
+    <tr>
+      <td><strong>Hosting</strong></td>
+      <td>Vercel</td>
+    </tr>
+    <tr>
+      <td><strong>Backend</strong></td>
+      <td>Serverless Functions (via Vercel)</td>
+    </tr>
+    <tr>
+      <td><strong>Storage</strong></td>
+      <td>Firebase Storage</td>
+    </tr>
+    <tr>
+      <td><strong>Database</strong></td>
+      <td>Firebase Database</td>
+    </tr>
+    <tr>
+      <td><strong>Authentication</strong></td>
+      <td>Firebase Authentication</td>
+    </tr>
+  </tbody>
+</table>
+
+
+Architecture Overview
+This application is built using the following technologies:
+
+1. Frontend
+Framework: Next.js with TypeScript for type-safe development.
+Styling: Tailwind CSS for rapid, utility-first styling and responsive design.
+2. Backend and Hosting
+Hosting: Vercel, which provides a seamless deployment pipeline for the Next.js application.
+Serverless Functions: Used to handle backend API endpoints where needed, hosted and managed by Vercel.
+3. Storage and Database
+Firebase Storage: Handles uploaded files such as user photos. Each uploaded file is securely stored and accessible via Firebase-provided URLs.
+Firebase Realtime Database/Firestore: (Specify which one you're using) Manages any application data like user information or processed results.
+4. Authentication
+Firebase Authentication: Provides user authentication using email/password or other providers like Google, ensuring secure access.
+5. User Flow
+Users interact with the Next.js frontend hosted on Vercel.
+Upon uploading an image, the photo is sent to Firebase Storage, where it is securely stored.
+User authentication is managed through Firebase Authentication.
+Any additional data or metadata is stored in the Firebase Database.
+Processed images or data are fetched and displayed on the frontend for users to view.
+6. Technologies Summary
+Frontend: Next.js, TypeScript, Tailwind CSS
+Hosting: Vercel
+Backend: Serverless functions (via Vercel)
+Storage: Firebase Storage
+Database: Firebase Database
+Authentication: Firebase Authentication
