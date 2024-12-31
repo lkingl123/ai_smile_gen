@@ -71,7 +71,7 @@ export default function PhotoUpload() {
               const { maskUrl } = await response.json();
               setMaskedImage(maskUrl);
             } else {
-              console.error("Masking API failed");
+              console.error("Error");
             }
           } catch (err) {
             console.error("Error during upload or masking:", err);
