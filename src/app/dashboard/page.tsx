@@ -130,7 +130,7 @@ export default function DashboardPage() {
                   <span className="text-blue-600 underline">Browse</span>
                 </label>
                 <p className="text-xs text-gray-400 mt-2">
-                  Supported formats: JPEG, PNG
+                  Supported formats: JPG, JPEG, PNG
                 </p>
               </div>
             </div>
