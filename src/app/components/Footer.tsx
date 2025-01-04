@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer className="w-full bg-gradient-to-r from-blue-50 to-indigo-100 py-8 px-4 md:px-6 text-center text-gray-500 text-sm shadow-inner mt-16">
       <p>
-        © 2024 DentalSimulator. All rights reserved. |{' '}
+        © 2024 AI Smile Gen. All rights reserved. |{' '}
         <Link href="/privacy" className="text-blue-600 hover:underline">
           Privacy Policy
         </Link>{' '}

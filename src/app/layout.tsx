@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 
 // Metadata
 export const metadata: Metadata = {
-  title: "Dental Simulator",
+  title: "AI Smile Gen",
   description: "Visualize your perfect smile with our cutting-edge dental simulation tool.",
   keywords: "dental simulator, perfect teeth, smile preview, dental AI",
 };

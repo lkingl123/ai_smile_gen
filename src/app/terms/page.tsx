@@ -59,7 +59,7 @@ export default function PrivacyPage() {
         <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl relative z-10 mt-8">
           <h1 className="text-3xl font-bold text-gray-800 mb-4 text-center">Privacy Policy</h1>
           <p className="text-gray-700 leading-relaxed mb-4">
-            At DentalSimulator, we are committed to protecting your privacy and ensuring the
+            At AI Smile Gen, we are committed to protecting your privacy and ensuring the
             security of your personal information. This Privacy Policy outlines how we collect,
             use, and safeguard your data when you use our services.
           </p>

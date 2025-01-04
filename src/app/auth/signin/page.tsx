@@ -6,47 +6,32 @@ import { auth } from '../../firebaseConfig'; // Adjust path as needed
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { FaHome } from 'react-icons/fa';
+
+function Footer() {
+    return (
+      <footer className="w-full py-6 bg-gray-100 text-center text-sm text-gray-600 border-t-2 border-gray-300">
+        &copy; 2023 AI Smile. All Rights Reserved. Designed, Built & Maintained by DIG
+      </footer>
+    );
+  }
 
 function SignInPageContent() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState(''); // Confirm password field
-  const [isSignUp, setIsSignUp] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(
     null
   );
 
   const router = useRouter();
-  const searchParams = useSearchParams();
-
-  // Check query parameter to toggle Sign Up mode
-  useEffect(() => {
-    const signupParam = searchParams.get('signup');
-    setIsSignUp(signupParam === 'true');
-  }, [searchParams]);
 
   const handleAuth = async (e?: React.FormEvent<HTMLFormElement>) => {
-    if (e) e.preventDefault(); // Prevent form submission refresh
+    if (e) e.preventDefault();
 
     try {
-      setMessage(null); // Clear any previous messages
-
-      if (isSignUp) {
-        // Sign Up Logic
-        if (password !== confirmPassword) {
-          setMessage({ type: 'error', text: 'Passwords do not match!' });
-          return;
-        }
-        await createUserWithEmailAndPassword(auth, email, password);
-        setMessage({ type: 'success', text: 'User created successfully! Redirecting...' });
-        setTimeout(() => router.push('/auth/signin'), 2000); // Redirect to Sign In after 2 seconds
-      } else {
-        // Sign In Logic
-        await signInWithEmailAndPassword(auth, email, password);
-        setMessage({ type: 'success', text: 'Logged in successfully! Redirecting...' });
-        setTimeout(() => router.push('/dashboard'), 2000); // Redirect to the dashboard after 2 seconds
-      }
+      setMessage(null);
+      await signInWithEmailAndPassword(auth, email, password);
+      setMessage({ type: 'success', text: 'Logged in successfully! Redirecting...' });
+      setTimeout(() => router.push('/dashboard'), 2000);
     } catch (error) {
       if (error instanceof Error) {
         setMessage({ type: 'error', text: error.message });
@@ -57,101 +42,75 @@ function SignInPageContent() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md relative">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={isSignUp ? 'signUp' : 'signIn'}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.4, ease: 'easeInOut' }}
-          >
-            <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-              {isSignUp ? 'Create an Account' : 'Sign In to Your Account'}
-            </h1>
+    <main className="min-h-screen flex flex-col">
+      <div className="flex flex-1">
+        {/* Left Section with Logo */}
+        <div className="hidden md:flex w-1/2 bg-blue-100 items-center justify-center">
+          <div className="text-center">
+            <img
+              src="/logo.png" // Replace with your logo path
+              alt="Logo"
+              className="w-96 h-96 mb-4"
+            />
+          </div>
+        </div>
 
-            {/* Wrap inputs and button in a form */}
-            <form className="flex flex-col space-y-4" onSubmit={handleAuth}>
-              {/* Email Input */}
+        {/* Right Section with Login Form */}
+        <div className="flex-1 bg-white flex flex-col justify-center items-center bg-gray-50 pb-12">
+          <div className="w-full max-w-md p-8 rounded-md">
+            <div className="flex flex-col items-center mb-6">
+              <img
+                src="/logo.png" // Replace with your logo path
+                alt="Logo"
+                className="w-24 h-24 mb-2"
+              />
+              <h1 className="text-2xl font-bold text-black">Welcome Back!</h1>
+              <p className="text-sm text-black mt-2">Login to your account</p>
+              <div className="border-t border-gray-300 my-4 w-full -mb-2"></div>
+            </div>
+            <form className="space-y-4" onSubmit={handleAuth}>
+            <label className="text-sm text-black block -mb-2">Enter Your Email</label>
               <input
                 type="email"
-                placeholder={isSignUp ? 'Enter your email' : 'Email'}
+                placeholder="Enter Your Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-
-              {/* Password Input */}
+              <label className="text-sm text-black block" style={{ marginBottom: '-8px' }}>Enter Your Password</label>
               <input
                 type="password"
-                placeholder={isSignUp ? 'Create a password' : 'Password'}
+                placeholder="Enter Your Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-
-              {/* Confirm Password Input (Only for Sign Up) */}
-              {isSignUp && (
-                <input
-                  type="password"
-                  placeholder="Confirm your password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              )}
-
-              {/* Auth Button */}
+              <div className="flex items-center justify-between text-sm text-black">
+                <label className="flex items-center">
+                  <input type="checkbox" className="mr-2" /> Remember Me
+                </label>
+                <Link href="/recover-password" className="text-blue-600 hover:underline">
+                  Recover Password
+                </Link>
+              </div>
               <button
                 type="submit"
-                className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
+                style={{ backgroundColor: '#0000FF' }}
+                className="w-full text-white py-3 rounded-full hover:opacity-70 transition"
               >
-                {isSignUp ? 'Sign Up' : 'Sign In'}
+                Login
               </button>
             </form>
-          </motion.div>
-        </AnimatePresence>
-
-        {/* Toggle Switch for Sign In/Sign Up */}
-        <div className="flex items-center justify-center gap-4 mt-6">
-          <span className="text-gray-700">{isSignUp ? 'Sign Up' : 'Sign In'}</span>
-          <label className="relative inline-flex items-center cursor-pointer">
-            <input
-              type="checkbox"
-              checked={isSignUp}
-              onChange={() => setIsSignUp(!isSignUp)}
-              className="sr-only peer"
-            />
-            <div className="w-11 h-6 bg-blue-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer dark:bg-gray-700 peer-checked:bg-blue-600 peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600"></div>
-          </label>
+            <p className="text-center text-black text-sm mt-4">
+              Don’t have an account?{' '}
+              <Link href="/auth/signup" className="text-blue-600 hover:underline">
+                Register Now!
+              </Link>
+            </p>
+          </div>
         </div>
-
-        {/* Return to Home Button */}
-        <div className="flex justify-center mt-6">
-          <Link
-            href="/"
-            className="w-12 h-12 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center shadow-lg transition duration-300"
-          >
-            <FaHome size={24} />
-          </Link>
-        </div>
-
-        {/* Message Box */}
-        {message && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.4, ease: 'easeInOut' }}
-            className={`mt-4 px-4 py-2 rounded-lg shadow-md text-white text-center ${
-              message.type === 'success' ? 'bg-green-500' : 'bg-red-500'
-            }`}
-          >
-            {message.text}
-          </motion.div>
-        )}
       </div>
+      <Footer />
     </main>
   );
 }

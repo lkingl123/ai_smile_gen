@@ -6,7 +6,7 @@ import { FaCloudUploadAlt } from "react-icons/fa";
 
 export default function PhotoUpload() {
   const [originalImage, setOriginalImage] = useState<string | null>(null);
-  const [maskedImage, setMaskedImage] = useState<string | null>(null);
+  const [enhancedImage, setEnhancedImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [authToken, setAuthToken] = useState<string | null>(null);
   const [user, setUser] = useState<any>(null);
@@ -24,9 +24,8 @@ export default function PhotoUpload() {
       }
     });
 
-    // Cleanup the subscription on unmount
-    return () => unsubscribe();
-  }, []); // Run this effect only once when the component mounts
+    return () => unsubscribe(); // Cleanup on unmount
+  }, []);
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -40,7 +39,7 @@ export default function PhotoUpload() {
     setLoading(true);
 
     try {
-      // Upload original image to Firebase Storage
+      // Step 1: Upload original image to Firebase Storage
       const storageRef = ref(storage, `uploads/${file.name}`);
       const uploadTask = uploadBytesResumable(storageRef, file);
 
@@ -57,7 +56,7 @@ export default function PhotoUpload() {
             console.log("Download URL:", downloadURL);
             setOriginalImage(downloadURL);
 
-            // Send the uploaded image URL to the backend for masking
+            // Step 2: Send the uploaded image URL to the backend for enhancement
             const response = await fetch("/api/process-image", {
               method: "POST",
               headers: {
@@ -68,13 +67,15 @@ export default function PhotoUpload() {
             });
 
             if (response.ok) {
-              const { maskUrl } = await response.json();
-              setMaskedImage(maskUrl);
+              const { enhancedImageUrl } = await response.json();
+              setEnhancedImage(enhancedImageUrl);
             } else {
-              console.error("Error");
+              const errorResponse = await response.json();
+              console.error("Backend Error:", errorResponse);
+              alert("Failed to enhance the image.");
             }
           } catch (err) {
-            console.error("Error during upload or masking:", err);
+            console.error("Error during upload or enhancement:", err);
           } finally {
             setLoading(false);
           }
@@ -94,14 +95,12 @@ export default function PhotoUpload() {
           <p className="text-gray-600 mb-6 text-center">
             Choose an image to visualize your perfect smile. Supported formats: JPG, PNG.
           </p>
-
-          {/* File Upload Button */}
           <label
             htmlFor="photo-upload"
             className="cursor-pointer bg-blue-600 text-white px-6 py-3 rounded-full shadow-lg hover:bg-blue-700 flex items-center space-x-2"
           >
             <FaCloudUploadAlt size={20} />
-                <span>{loading ? "Uploading..." : "Choose File"}</span>
+            <span>{loading ? "Uploading..." : "Choose File"}</span>
           </label>
           <input
             id="photo-upload"
@@ -111,18 +110,13 @@ export default function PhotoUpload() {
             onChange={handleImageUpload}
             disabled={loading}
           />
-
-          {/* Loading Spinner */}
           {loading && (
             <div className="mt-6 flex justify-center items-center">
               <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
             </div>
           )}
-
-          {/* Display Original and Masked Images */}
           {originalImage && (
             <div className="mt-6 flex justify-center items-center space-x-6">
-              {/* Original Image */}
               <div className="flex flex-col items-center">
                 <p className="text-center text-gray-600 mb-2">Original Photo:</p>
                 <img
@@ -131,14 +125,12 @@ export default function PhotoUpload() {
                   className="max-w-full max-h-64 object-contain rounded border"
                 />
               </div>
-
-              {/* Masked Image */}
-              {maskedImage && (
+              {enhancedImage && (
                 <div className="flex flex-col items-center">
-                  <p className="text-center text-gray-600 mb-2">Masked Photo:</p>
+                  <p className="text-center text-gray-600 mb-2">Enhanced Photo:</p>
                   <img
-                    src={maskedImage}
-                    alt="Masked"
+                    src={enhancedImage}
+                    alt="Enhanced"
                     className="max-w-full max-h-64 object-contain rounded border"
                   />
                 </div>

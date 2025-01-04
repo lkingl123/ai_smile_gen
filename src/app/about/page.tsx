@@ -60,7 +60,7 @@ export default function AboutPage() {
         <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-3xl relative z-10 mt-8">
           <h1 className="text-3xl font-bold text-gray-800 mb-4 text-center">About Us</h1>
           <p className="text-gray-700 leading-relaxed mb-6 text-center">
-            At DentalSimulator, our mission is to help you envision your perfect smile. Combining
+            At AI Smile Gen, our mission is to help you envision your perfect smile. Combining
             advanced technology with a user-friendly platform, we aim to empower our users to make
             confident decisions about their dental health.
           </p>
@@ -68,7 +68,7 @@ export default function AboutPage() {
           {/* Our Story */}
           <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-3">Our Story</h2>
           <p className="text-gray-700 leading-relaxed mb-4">
-            DentalSimulator was founded with a vision to revolutionize how people approach smile
+            AI Smile Gen was founded with a vision to revolutionize how people approach smile
             makeovers. By providing an intuitive tool that showcases potential results, we’ve made
             it easier for individuals to explore their options and collaborate with dental
             professionals. Our journey started with a small team of passionate innovators and has
