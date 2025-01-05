@@ -32,15 +32,35 @@ export default function HomePage() {
     sequence();
   }, [controls]);
 
+  // Animation Variants for Smooth Transitions
+  const heroVariants = {
+    hidden: { opacity: 0, x: -100 }, // Start off-screen to the left
+    visible: {
+      opacity: 1,
+      x: 0, // Move into position
+      transition: { duration: 1, ease: "easeInOut" },
+    },
+  };
+  
   return (
     <main className="min-h-screen flex flex-col items-center relative overflow-hidden">
       {/* Header */}
       <Header />
 
       {/* Hero Section */}
-      <div className="max-w-7xl w-full p-6 md:p-10 flex flex-col md:flex-row items-center justify-between gap-8 mt-24">
+      <motion.div
+        className="max-w-7xl w-full p-6 md:p-10 flex flex-col md:flex-row items-center justify-between gap-8 mt-24"
+        initial="hidden"
+        animate="visible"
+        variants={heroVariants}
+      >
         {/* Text Content */}
-        <div className="flex flex-col items-center text-center max-w-lg space-y-6">
+        <motion.div
+          className="flex flex-col items-center text-center max-w-lg space-y-6"
+          initial="hidden"
+          animate="visible"
+          variants={heroVariants}
+        >
           <div className="flex flex-col items-center">
             <h2 className="text-3xl md:text-5xl font-extrabold text-gray-800 leading-tight">
               Smile Generation
@@ -79,10 +99,15 @@ export default function HomePage() {
           >
             Join our waitlist for early bird pricing
           </Link>
-        </div>
+        </motion.div>
 
         {/* Video Content with Watch Demo Text */}
-        <div className="relative w-full max-w-[700px] flex flex-col items-center">
+        <motion.div
+          className="relative w-full max-w-[700px] flex flex-col items-center"
+          initial="hidden"
+          animate="visible"
+          variants={heroVariants}
+        >
           <div className="relative w-full aspect-[16/9] md:aspect-[16/10]">
             <iframe
               src="https://www.loom.com/embed/09077f5ebdc84a539019242330016ef9?hide_owner=true&hide_share=true&hide_title=true&hide_embed_top_bar=true"
@@ -96,8 +121,8 @@ export default function HomePage() {
           <p className="text-4xl font-bold text-gray-800 mt-8">
             Watch our demo!
           </p>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* Features Section */}
       <motion.div
