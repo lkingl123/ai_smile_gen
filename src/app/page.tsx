@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import Link from "next/link";
 import { FaTooth, FaRegSmileBeam, FaHeartbeat } from "react-icons/fa";
@@ -6,6 +6,7 @@ import { motion, useAnimation } from "framer-motion";
 import { useEffect } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import { FaBan, FaCheck } from "react-icons/fa";
 
 export default function HomePage() {
   const controls = useAnimation();
@@ -28,60 +29,62 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col items-center relative overflow-hidden">
-      {/* Floating Shapes */}
-      <motion.div
-        className="absolute top-20 -right-10 w-80 h-80 bg-gradient-to-tr from-blue-300 to-indigo-400 rounded-full opacity-50"
-        animate={controls}
-        whileHover={{ scale: 1.1 }}
-      ></motion.div>
-      <motion.div
-        className="absolute bottom-32 -left-20 w-96 h-96 bg-gradient-to-tl from-blue-200 to-blue-500 rounded-full opacity-40"
-        animate={controls}
-        whileHover={{ scale: 1.1 }}
-      ></motion.div>
-      <motion.div
-        className="absolute top-40 left-20 w-64 h-64 bg-gradient-to-tr from-indigo-400 to-purple-500 rounded-full opacity-60"
-        animate={controls}
-        whileHover={{ scale: 1.1 }}
-      ></motion.div>
-      <motion.div
-        className="absolute top-60 right-40 w-72 h-72 bg-gradient-to-br from-green-300 to-blue-300 rounded-full opacity-50"
-        animate={controls}
-        whileHover={{ scale: 1.1 }}
-      ></motion.div>
-      <motion.div
-        className="absolute bottom-20 right-60 w-56 h-56 bg-gradient-to-r from-pink-300 to-purple-500 rounded-full opacity-50"
-        animate={controls}
-        whileHover={{ scale: 1.1 }}
-      ></motion.div>
-
       {/* Header */}
       <Header />
 
-{/* Hero Section */}
-<motion.div
-  className="max-w-5xl w-full p-10 text-center flex flex-col items-center mt-12"
-  initial={{ opacity: 0, y: -20 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 1 }}
->
-  <h2 className="text-6xl font-extrabold text-gray-800 mb-6 leading-tight drop-shadow-lg">
-    Upload Your <span className="text-blue-600">Photo</span> to See Your Perfect Smile
-  </h2>
-  <p className="text-xl text-gray-700 mb-8 max-w-3xl">
-    Transform your confidence with a new smile! Simply upload your photo, and
-    we’ll show you a realistic preview of your perfect teeth in seconds.
-  </p>
-  <div className="flex flex-wrap justify-center gap-6">
-    <Link
-      href="/dashboard"
-      className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-4 px-8 rounded-full shadow-lg transform transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-105"
-    >
-      Upload Photo
-    </Link>
-  </div>
-</motion.div>
+      {/* Hero Section */}
+      <div className="max-w-7xl w-full p-10 flex flex-col md:flex-row items-center justify-between gap-8 mt-24">
+        {/* Text Content */}
+        <div className="flex flex-col items-start max-w-xl">
+          <h2 className="text-5xl font-extrabold text-gray-800 mb-4 leading-tight">
+            Smile Generation <span className="text-blue-dark ml-24">Software</span>
+          </h2>
+          <p className="text-xl text-gray-500 mb-6">
+            AI dental software to close patients faster
+          </p>
+          <ul className="space-y-6 mb-6">
+            <li className="flex items-center text-gray-700 mt-4">
+              <FaRegSmileBeam className="text-blue-dark text-4xl mr-4" />
+              <span className="font-bold text-xl">
+                Beautiful smiles in 15 seconds or less
+              </span>
+            </li>
+            <li className="flex items-center text-gray-700 mt-4">
+              <FaBan className="text-blue-dark text-4xl mr-4" />
+              <span className="font-bold text-xl">
+                No training or manual editing required
+              </span>
+            </li>
+            <li className="flex items-center text-gray-700 mt-4">
+              <FaCheck className="text-blue-dark text-4xl mr-4" />
+              <span className="font-bold text-xl">Increased patient close rates</span>
+            </li>
+          </ul>
 
+          <Link
+            href="/waitlist"
+            className="bg-blue-dark hover:bg-blue-700 text-white font-semibold py-4 px-8 rounded-full shadow-md transition duration-300 ease-in-out ml-8 mt-6"
+          >
+            Join our waitlist for early bird pricing
+          </Link>
+        </div>
+
+        {/* Video Content */}
+  <div className="relative w-full max-w-[700px] aspect-video">
+    <iframe
+      src="https://www.loom.com/embed/09077f5ebdc84a539019242330016ef9?hide_owner=true&hide_share=true&hide_title=true&hide_embed_top_bar=true"
+      title="AI Teeth Video"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowFullScreen
+      className="absolute top-0 left-0 w-full h-full rounded-lg"
+    ></iframe>
+  </div>
+</div>
+
+      {/* Watch Demo Text */}
+      <p className="text-4xl font-bold text-gray-800 mb-12 drop-shadow-lg">
+        Watch our demo!
+      </p>
 
       {/* Features Section */}
       <motion.div
@@ -90,23 +93,31 @@ export default function HomePage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 1.5 }}
       >
-        <h3 className="text-4xl font-bold text-gray-800 mb-12 drop-shadow-lg">Why Choose Us?</h3>
+        <h3 className="text-4xl font-bold text-gray-800 mb-12 drop-shadow-lg">
+          Why Choose Us?
+        </h3>
         <div className="grid gap-10 grid-cols-1 md:grid-cols-3">
           {[
             {
-              icon: <FaTooth className="text-blue-500 text-6xl mb-4 drop-shadow-md" />,
+              icon: (
+                <FaTooth className="text-blue-500 text-6xl mb-4 drop-shadow-md" />
+              ),
               title: "Advanced Technology",
               description:
                 "Experience state-of-the-art AI-powered dental simulations for accurate results.",
             },
             {
-              icon: <FaRegSmileBeam className="text-blue-500 text-6xl mb-4 drop-shadow-md" />,
+              icon: (
+                <FaRegSmileBeam className="text-blue-500 text-6xl mb-4 drop-shadow-md" />
+              ),
               title: "Natural-Looking Results",
               description:
                 "Visualize a realistic smile makeover tailored to your unique facial features.",
             },
             {
-              icon: <FaHeartbeat className="text-blue-500 text-6xl mb-4 drop-shadow-md" />,
+              icon: (
+                <FaHeartbeat className="text-blue-500 text-6xl mb-4 drop-shadow-md" />
+              ),
               title: "Trusted by Professionals",
               description:
                 "Used by dentists worldwide to help patients make informed decisions about their smile.",
@@ -118,7 +129,9 @@ export default function HomePage() {
               whileHover={{ scale: 1.05, rotate: 1 }}
             >
               <div className="flex justify-center">{feature.icon}</div>
-              <h4 className="text-2xl font-bold text-gray-800 mt-4">{feature.title}</h4>
+              <h4 className="text-2xl font-bold text-gray-800 mt-4">
+                {feature.title}
+              </h4>
               <p className="text-gray-600 mt-2">{feature.description}</p>
             </motion.div>
           ))}
@@ -167,7 +180,8 @@ export default function HomePage() {
           Ready to Transform Your Smile?
         </h3>
         <p className="text-white mb-8">
-          Join thousands of happy patients discovering their perfect smiles with us.
+          Join thousands of happy patients discovering their perfect smiles with
+          us.
         </p>
         <Link
           href="/auth/signup"

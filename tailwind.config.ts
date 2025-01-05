@@ -11,6 +11,14 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        blue: {
+          DEFAULT: "#0000FF", // Default blue
+          light: "#5A5AFF", // Optional: lighter blue
+          dark: "#000eff", // Optional: darker blue
+        },
+      },
+      fontFamily: {
+        sans: ["Poppins", "ui-sans-serif", "system-ui"],
       },
     },
   },

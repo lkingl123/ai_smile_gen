@@ -151,8 +151,7 @@ function SignInPageContent() {
 
               <button
                 type="submit"
-                style={{ backgroundColor: '#0000FF' }}
-                className="w-full text-white py-3 rounded-full hover:opacity-70 transition"
+                className="bg-blue-dark w-full text-white py-3 rounded-full hover:opacity-70 transition"
               >
                 Login
               </button>
