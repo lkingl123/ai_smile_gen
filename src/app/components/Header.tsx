@@ -32,19 +32,19 @@ export default function Header() {
         <nav className="hidden md:flex items-center space-x-6">
           <Link
             href="/"
-            className="relative font-semibold text-gray-700 px-4 py-2 transition-transform transform group hover:scale-110 hover:text-blue-600"
+            className="relative font-semibold text-gray-700 px-4 py-2 transition-transform transform group hover:scale-110 hover:text-blue-dark"
           >
             Home
           </Link>
           <Link
             href="/about"
-            className="relative font-semibold text-gray-700 px-4 py-2 transition-transform transform group hover:scale-110 hover:text-blue-600"
+            className="relative font-semibold text-gray-700 px-4 py-2 transition-transform transform group hover:scale-110 hover:text-blue-dark"
           >
             About
           </Link>
           <Link
             href="/contact"
-            className="relative font-semibold text-gray-700 px-4 py-2 transition-transform transform group hover:scale-110 hover:text-blue-600"
+            className="relative font-semibold text-gray-700 px-4 py-2 transition-transform transform group hover:scale-110 hover:text-blue-dark"
           >
             Contact
           </Link>
@@ -54,13 +54,13 @@ export default function Header() {
         <div className="hidden md:flex items-center space-x-4">
           <Link
             href="/auth/signin"
-            className="bg-blue-dark hover:bg-blue-700 text-white font-semibold py-2 px-5 rounded-md transition duration-300 ease-in-out"
+            className="bg-blue-dark hover:bg-blue-700 text-white font-semibold py-2 px-5 rounded-md transition duration-300 ease-in-out hover:scale-110"
           >
             Sign In
           </Link>
           <Link
             href="/auth/signup"
-            className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-5 rounded-md transition duration-300 ease-in-out"
+            className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-5 rounded-md transition duration-300 ease-in-out hover:scale-110"
           >
             Sign Up
           </Link>
