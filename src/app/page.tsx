@@ -16,6 +16,7 @@ import Footer from "./components/Footer";
 import Slider from "./components/Slider";
 import { RiFolderUploadFill } from "react-icons/ri";
 import { RiEmotionHappyLine } from "react-icons/ri";
+import { FaQuoteRight } from "react-icons/fa";
 
 export default function HomePage() {
   const controls = useAnimation();
@@ -67,7 +68,7 @@ export default function HomePage() {
   };
 
   return (
-    <main className="min-h-screen bg-blue-50 flex flex-col items-center relative overflow-hidden pt-[80px] lg:pt-[180px]">
+    <main className="min-h-screen flex flex-col items-center relative overflow-hidden pt-[80px] lg:pt-[180px]">
       {/* Header */}
       <Header />
       {/* Hero Section */}
@@ -274,6 +275,57 @@ export default function HomePage() {
           <Slider />
         </div>
       </motion.section>
+
+      {/* Feature Section 3 */}
+      <section className="w-full bg-white py-16 px-8 flex flex-col md:flex-row justify-center items-center gap-12">
+        <div className="bg-blue-dark text-white p-6 md:p-10 rounded-lg shadow-lg text-center md:text-left">
+          <p className="text-xl md:text-2xl font-semibold line-through text-red-500">
+            $99.99/mo
+          </p>
+          <p className="text-3xl md:text-5xl font-extrabold">$64.99/mo</p>
+          <p className="mt-2 text-sm md:text-base font-bold">
+            Early Bird Pricing
+          </p>
+          <p className="text-gray-400 mt-4 font-bold">
+            Our exclusive, early-bird pricing when you join our waitlist
+          </p>
+          <ul className="mt-4 space-y-2 text-left">
+            <li className="flex items-center gap-2 font-bold">
+              <FaCheck className="text-green-400" /> Beautiful smiles in 15
+              seconds
+            </li>
+            <li className="flex items-center gap-2 font-bold">
+              <FaCheck className="text-green-400" /> Close patients faster
+            </li>
+            <li className="flex items-center gap-2 font-bold">
+              <FaCheck className="text-green-400" /> No training or manual
+              editing required
+            </li>
+          </ul>
+          <Link
+            href="/waitlist"
+            className="inline-block mt-6 bg-white text-blue-600 px-4 py-2 rounded-full font-bold hover:opacity-80"
+          >
+            Join our waitlist
+          </Link>
+        </div>
+        <div className="text-gray-700 max-w-md text-center">
+          <FaQuoteRight className="text-blue-dark text-4xl mb-4 mx-auto" />
+          <p className="text-l font-bold leading-relaxed tracking-wider text-left">
+            The AI Smile Generator tool has been a huge asset to our practice.
+            We understand the benefit of showing a patient their potential smile
+            during the initial consultation to increase close rates. Compared to
+            other smile generation software, the AI Smile Generator is a no
+            brainer because it saves us doctor & staff time, money, requires no
+            training, and produces beautiful smiles in seconds. This has been
+            perfect for consultations.
+          </p>
+          <p className="mt-6 font-semibold text-gray-900">
+            Dental Implant Group
+          </p>
+          <p className="text-sm text-gray-500">DSO</p>
+        </div>
+      </section>
 
       <Footer />
     </main>
