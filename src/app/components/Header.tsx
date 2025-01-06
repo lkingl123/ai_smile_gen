@@ -1,29 +1,49 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { FaBars, FaTimes } from "react-icons/fa";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false); // Menu starts closed
+  const [isScrolled, setIsScrolled] = useState(false); // Track scroll state
 
   const toggleMenu = () => {
     setMenuOpen((prev) => !prev);
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 10) {
+        setIsScrolled(true); // Shrink header
+      } else {
+        setIsScrolled(false); // Restore header
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
-    <header className="fixed top-0 left-0 w-full z-50 bg-white shadow-md">
-      <div className="w-full mx-auto p-4 flex items-center justify-between">
+    <header
+      className={`fixed top-0 left-0 w-full z-50 bg-white shadow-md transition-transform duration-300 ${
+        isScrolled ? "py-2 shadow-lg" : "py-4"
+      }`}
+    >
+      <div className="w-full mx-auto px-4 flex items-center justify-between">
         {/* Logo completely left-aligned */}
         <div className="flex-shrink-0">
           <Link href="/">
             <Image
               src="/logo_words.png"
               alt="AI Smile Generator Logo"
-              width={170}
-              height={60}
-              className="cursor-pointer"
+              width={isScrolled ? 140 : 170} // Shrink logo size when scrolling
+              height={isScrolled ? 50 : 60}
+              className="cursor-pointer transition-all duration-300"
             />
           </Link>
         </div>
