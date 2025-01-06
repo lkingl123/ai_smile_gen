@@ -56,7 +56,7 @@ export default function HomePage() {
       >
         {/* Text Content */}
         <motion.div
-          className="flex flex-col items-center text-center max-w-lg space-y-6 md:mt-0"
+          className="flex flex-col items-center text-center max-w-lg space-y-8 md:mt-0"
           initial="hidden"
           animate="visible"
           variants={heroVariants}
