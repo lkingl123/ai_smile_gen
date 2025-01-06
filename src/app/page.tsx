@@ -118,7 +118,7 @@ export default function HomePage() {
             ></iframe>
           </div>
           {/* Watch Demo Text */}
-          <p className="text-xl md:text-4xl font-bold text-gray-800 mt-4 md:mt-8">
+          <p className="text-xl md:text-5xl font-bold text-gray-800 mt-4 md:mt-8">
             Watch our demo!
           </p>
         </motion.div>
