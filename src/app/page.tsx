@@ -74,20 +74,20 @@ export default function HomePage() {
           </p>
           <ul className="space-y-3 text-center">
             <li className="flex items-center text-gray-700">
-              <FaRegSmileBeam className="text-blue-dark text-2xl md:text-4xl mr-4" />
-              <span className="font-bold text-sm md:text-xl text-gray-500">
+              <FaRegSmileBeam className="text-blue-dark text-4xl md:text-4xl mr-4" />
+              <span className="font-bold text-m md:text-xl text-gray-500">
                 Beautiful smiles in 15 seconds or less
               </span>
             </li>
             <li className="flex items-center text-gray-700">
-              <FaBan className="text-blue-dark text-2xl md:text-4xl mr-4" />
-              <span className="font-bold text-sm md:text-xl text-gray-500">
+              <FaBan className="text-blue-dark text-4xl md:text-4xl mr-4" />
+              <span className="font-bold text-m md:text-xl text-gray-500">
                 No training or manual editing required
               </span>
             </li>
             <li className="flex items-center text-gray-700">
-              <FaCheck className="text-blue-dark text-2xl md:text-4xl mr-4" />
-              <span className="font-bold text-sm md:text-xl text-gray-500">
+              <FaCheck className="text-blue-dark text-4xl md:text-4xl mr-4" />
+              <span className="font-bold text-m md:text-xl text-gray-500">
                 Increased patient close rates
               </span>
             </li>
