@@ -17,7 +17,6 @@ import Slider from "./components/Slider";
 import { RiFolderUploadFill } from "react-icons/ri";
 import { RiEmotionHappyLine } from "react-icons/ri";
 
-
 export default function HomePage() {
   const controls = useAnimation();
   const [sliderPosition, setSliderPosition] = useState(50);
@@ -54,7 +53,7 @@ export default function HomePage() {
     visible: {
       opacity: 1,
       x: 0, // Move into position
-      transition: { duration: 1, ease: "easeInOut" },
+      transition: { duration: 1.5, ease: "easeInOut" },
     },
   };
 
@@ -192,7 +191,21 @@ export default function HomePage() {
         </div>
       </motion.section>
 
-      <section className="relative bg-gradient-to-r from-blue-dark to-blue-400 py-16 w-full rounded-r-[180px]">
+      {/* Features Section 2*/}
+      <motion.section
+        className="relative bg-gradient-to-r from-blue-dark to-blue-400 py-16 w-full rounded-r-[180px]"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }} // Animates when 30% of the section is in view
+        variants={{
+          hidden: { opacity: 0, x: -100 }, // Off-screen to the right
+          visible: {
+            opacity: 1,
+            x: 0, // Moves into position
+            transition: { duration: 1.5, ease: "easeInOut" },
+          },
+        }}
+      >
         <div className="max-w-7xl mx-auto px-4 md:px-12 flex flex-col items-center">
           <h2 className="text-2xl md:text-4xl font-extrabold text-white mb-6">
             Smile generation software to increase close rates
@@ -202,7 +215,6 @@ export default function HomePage() {
             of 4 renders to choose from with no manual editing needed.
           </p>
 
-          {/* Features Section 2*/}
           <div className="flex flex-col md:flex-row items-center justify-between w-full gap-8 mb-16">
             {/* Step 1 */}
             <div className="flex flex-col items-center text-center max-w-sm">
@@ -261,7 +273,7 @@ export default function HomePage() {
           </div>
           <Slider />
         </div>
-      </section>
+      </motion.section>
 
       <Footer />
     </main>
