@@ -56,7 +56,7 @@ export default function HomePage() {
       >
         {/* Text Content */}
         <motion.div
-          className="flex flex-col items-center text-center max-w-lg space-y-8 md:mt-0"
+          className="flex flex-col items-center text-center max-w-lg space-y-8 md:mt-0 md:-mt-28"
           initial="hidden"
           animate="visible"
           variants={heroVariants}
@@ -118,7 +118,7 @@ export default function HomePage() {
             ></iframe>
           </div>
           {/* Watch Demo Text */}
-          <p className="text-xl md:text-5xl font-bold text-gray-800 mt-4 md:mt-8">
+          <p className="text-3xl md:text-5xl font-bold text-gray-800 mt-4 md:mt-8">
             Watch our demo!
           </p>
         </motion.div>
