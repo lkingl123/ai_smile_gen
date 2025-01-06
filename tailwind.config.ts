@@ -16,6 +16,7 @@ export default {
           light: "#5A5AFF", // Optional: lighter blue
           dark: "#000eff", // Optional: darker blue
         },
+        'light-blue': '#f9fafc', // Correct standalone color
       },
       fontFamily: {
         sans: ["Poppins", "ui-sans-serif", "system-ui"],
