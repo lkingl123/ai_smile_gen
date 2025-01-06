@@ -9,12 +9,17 @@ const Slider = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [isSliderHovered, setIsSliderHovered] = useState(false);
 
-  const handleMove = (event: React.MouseEvent<HTMLDivElement, MouseEvent> | React.TouchEvent<HTMLDivElement>) => {
+  const handleMove = (
+    event:
+      | React.MouseEvent<HTMLDivElement, MouseEvent>
+      | React.TouchEvent<HTMLDivElement>
+  ) => {
     if (!isDragging) return;
 
     // Determine the event type (mouse or touch)
     const clientX =
-      (event as React.MouseEvent).clientX || (event as React.TouchEvent).touches[0]?.clientX;
+      (event as React.MouseEvent).clientX ||
+      (event as React.TouchEvent).touches[0]?.clientX;
 
     const rect = event.currentTarget.getBoundingClientRect();
     const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
@@ -68,7 +73,7 @@ const Slider = () => {
       onMouseLeave={handleMouseLeave}
     >
       <div
-        className="relative w-full max-w-[1000px] aspect-[4/3] m-auto overflow-hidden select-none rounded-xl shadow-lg"
+        className="relative w-full max-w-[1000px] aspect-[4/3] m-auto overflow-hidden select-none rounded-[80px] shadow-lg" // Increased border radius
         onMouseMove={handleMove}
         onMouseDown={handleMouseDown}
         onTouchMove={handleMove}
@@ -81,12 +86,12 @@ const Slider = () => {
           draggable={false}
           priority
           src="/after.png"
-          className="rounded-xl object-cover object-[50%_25%]"
+          className="rounded-[50px] object-cover object-[50%_25%]" // Increased border radius
         />
 
         {/* Before Image with Clipping */}
         <div
-          className="absolute top-0 left-0 right-0 w-full max-w-[1000px] aspect-[4/3] m-auto overflow-hidden select-none rounded-xl"
+          className="absolute top-0 left-0 right-0 w-full max-w-[1000px] aspect-[4/3] m-auto overflow-hidden select-none rounded-[80px]" // Increased border radius
           style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
         >
           <Image
@@ -95,7 +100,7 @@ const Slider = () => {
             draggable={false}
             alt="Before Image"
             src="/before.png"
-            className="rounded-xl object-cover object-[50%_25%]"
+            className="rounded-[50px] object-cover object-[50%_25%]" // Increased border radius
           />
         </div>
 
@@ -105,7 +110,7 @@ const Slider = () => {
             isHovered && !isSliderHovered && !isDragging
               ? "bg-black bg-opacity-50 opacity-100"
               : "bg-black bg-opacity-0 opacity-0"
-          }`}
+          } rounded-[50px]`} // Increased border radius
         >
           <span className="text-lg font-bold">Before</span>
           <span className="text-lg font-bold">After</span>
@@ -113,7 +118,7 @@ const Slider = () => {
 
         {/* Slider */}
         <div
-          className="absolute top-0 bottom-0 w-1 bg-white cursor-ew-resize"
+          className="absolute top-0 bottom-0 w-1 bg-white cursor-ew-resize rounded-full" // Fully rounded slider
           style={{
             left: `calc(${sliderPosition}% - 1px)`,
           }}
