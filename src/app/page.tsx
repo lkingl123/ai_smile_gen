@@ -44,12 +44,12 @@ export default function HomePage() {
   };
 
   return (
-    <main className="min-h-screen bg-blue-50 flex flex-col items-center relative overflow-hidden pt-[80px]">
+    <main className="min-h-screen bg-blue-50 flex flex-col items-center relative overflow-hidden pt-[80px] lg:pt-[180px]">
       {/* Header */}
       <Header />
       {/* Hero Section */}
       <motion.div
-        className="h-screen w-full p-6 md:p-10 flex flex-col md:flex-row items-center justify-center gap-6 md:gap-20 md:-mt-20 pt-30 md:pt-0"
+        className="w-full p-6 md:p-10 flex flex-col md:flex-row items-center justify-center gap-6 md:gap-20 pt-30 md:pt-0 mb-10 lg:mb-48"
         initial="hidden"
         animate="visible"
         variants={heroVariants}

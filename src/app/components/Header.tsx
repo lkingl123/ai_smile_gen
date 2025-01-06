@@ -33,6 +33,7 @@ export default function Header() {
       className={`fixed top-0 left-0 w-full z-50 bg-white shadow-md transition-transform duration-300 ${
         isScrolled ? "py-2 shadow-lg" : "py-4"
       }`}
+      style={{ height: isScrolled ? "60px" : "80px" }} // Fixed height
     >
       <div className="w-full mx-auto px-4 flex items-center justify-between">
         {/* Logo completely left-aligned */}
@@ -99,7 +100,9 @@ export default function Header() {
       {/* Mobile Menu */}
       <nav
         className={`absolute top-[64px] left-0 w-full bg-white z-40 flex flex-col items-center space-y-4 p-6 shadow-lg md:hidden transition-transform duration-300 ease-in-out ${
-          menuOpen ? "translate-y-0 opacity-100 visible" : "-translate-y-full opacity-0 invisible"
+          menuOpen
+            ? "translate-y-0 opacity-100 visible"
+            : "-translate-y-full opacity-0 invisible"
         }`}
       >
         <Link
