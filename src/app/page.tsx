@@ -13,7 +13,10 @@ import { motion, useAnimation } from "framer-motion";
 import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import Slider from "./components/Slider"
+import Slider from "./components/Slider";
+import { RiFolderUploadFill } from "react-icons/ri";
+import { RiEmotionHappyLine } from "react-icons/ri";
+
 
 export default function HomePage() {
   const controls = useAnimation();
@@ -189,19 +192,74 @@ export default function HomePage() {
         </div>
       </motion.section>
 
-      {/* Feature Section 2 */}
       <section className="relative bg-gradient-to-r from-blue-dark to-blue-400 py-16 w-full rounded-r-[180px]">
-        <div className="max-w-7xl mx-auto px-4 md:px-12 flex flex-col items-center text-center">
-          <h2 className="text-3xl md:text-5xl font-extrabold text-white mb-6">
+        <div className="max-w-7xl mx-auto px-4 md:px-12 flex flex-col items-center">
+          <h2 className="text-2xl md:text-4xl font-extrabold text-white mb-6">
             Smile generation software to increase close rates
           </h2>
-          <p className="text-white text-base md:text-lg max-w-2xl mb-10">
+          <p className="text-white text-base md:text-m max-w mb-10 text-center">
             In 15 seconds or less, our AI Smile Generator will produce a series
             of 4 renders to choose from with no manual editing needed.
           </p>
 
-         <Slider />
+          {/* Features Section 2*/}
+          <div className="flex flex-col md:flex-row items-center justify-between w-full gap-8 mb-16">
+            {/* Step 1 */}
+            <div className="flex flex-col items-center text-center max-w-sm">
+              <div className="bg-white text-blue-500 p-4 rounded-full shadow-lg mb-4">
+                {/* Icon for Step 1 */}
+                <RiFolderUploadFill className="h-12 w-12" />
+              </div>
+              <h3 className="text-xl font-bold text-white">Upload a Picture</h3>
+              <p className="text-sm text-white font-bold mt-2">
+                Upload a picture directly from your phone or tablet. If using a
+                camera, upload it through our desktop application.
+              </p>
+            </div>
 
+            {/* Arrow 1 */}
+            <div className="hidden md:flex items-center">
+              <div className="flex items-center gap-2">
+                <div className="h-0.5 w-20 border-t-2 border-dashed border-white" />
+                <FaArrowUp className="h-6 w-6 text-white rotate-90 md:rotate-90" />
+              </div>
+            </div>
+
+            {/* Step 2 */}
+            <div className="flex flex-col items-center text-center max-w-sm">
+              <div className="bg-white text-blue-500 p-4 rounded-full shadow-lg mb-4">
+                {/* Icon for Step 2 */}
+                <FaCodeBranch className="h-12 w-12" />
+              </div>
+              <h3 className="text-xl font-bold text-white">AI Generation</h3>
+              <p className="text-sm text-white font-bold mt-2">
+                In 15 seconds or less, our AI smile generation tool will produce
+                a series of 4 renders to choose from.
+              </p>
+            </div>
+
+            {/* Arrow 2 */}
+            <div className="hidden md:flex items-center">
+              <div className="flex items-center gap-2">
+                <div className="h-0.5 w-20 border-t-2 border-dashed border-white" />
+                <FaArrowUp className="h-6 w-6 text-white rotate-90 md:rotate-90" />
+              </div>
+            </div>
+
+            {/* Step 3 */}
+            <div className="flex flex-col items-center text-center max-w-sm">
+              <div className="bg-white text-blue-500 p-4 rounded-full shadow-lg mb-4">
+                {/* Icon for Step 3 */}
+                <RiEmotionHappyLine className="h-12 w-12" />
+              </div>
+              <h3 className="text-xl font-bold text-white">Show the Patient</h3>
+              <p className="text-sm text-white font-bold mt-2">
+                Show the generated before and after to the patient, increasing
+                commitment to closing on a new smile.
+              </p>
+            </div>
+          </div>
+          <Slider />
         </div>
       </section>
 
