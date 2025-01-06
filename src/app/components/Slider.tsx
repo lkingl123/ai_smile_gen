@@ -9,11 +9,15 @@ const Slider = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [isSliderHovered, setIsSliderHovered] = useState(false);
 
-  const handleMove = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const handleMove = (event: React.MouseEvent<HTMLDivElement, MouseEvent> | React.TouchEvent<HTMLDivElement>) => {
     if (!isDragging) return;
 
+    // Determine the event type (mouse or touch)
+    const clientX =
+      (event as React.MouseEvent).clientX || (event as React.TouchEvent).touches[0]?.clientX;
+
     const rect = event.currentTarget.getBoundingClientRect();
-    const x = Math.max(0, Math.min(event.clientX - rect.left, rect.width));
+    const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
     const percent = Math.max(0, Math.min((x / rect.width) * 100, 100));
 
     setSliderPosition(percent);
@@ -27,13 +31,21 @@ const Slider = () => {
     setIsDragging(false);
   };
 
+  const handleTouchStart = () => {
+    setIsDragging(true);
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+  };
+
   const handleMouseEnter = () => {
     if (!isDragging) {
       setTimeout(() => {
         if (!isSliderHovered) {
           setIsHovered(true);
         }
-      }, 50); // Delay to avoid flickering
+      }, 50);
     }
   };
 
@@ -43,7 +55,7 @@ const Slider = () => {
         if (!isSliderHovered) {
           setIsHovered(false);
         }
-      }, 50); // Delay to avoid flickering
+      }, 50);
     }
   };
 
@@ -51,6 +63,7 @@ const Slider = () => {
     <div
       className="w-full relative"
       onMouseUp={handleMouseUp}
+      onTouchEnd={handleTouchEnd}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -58,6 +71,8 @@ const Slider = () => {
         className="relative w-full max-w-[1000px] aspect-[4/3] m-auto overflow-hidden select-none rounded-xl shadow-lg"
         onMouseMove={handleMove}
         onMouseDown={handleMouseDown}
+        onTouchMove={handleMove}
+        onTouchStart={handleTouchStart}
       >
         {/* After Image */}
         <Image
@@ -107,6 +122,16 @@ const Slider = () => {
             setIsHovered(false); // Immediately hide overlay when slider is hovered
           }}
           onMouseLeave={() => {
+            setIsSliderHovered(false);
+            if (!isDragging) {
+              setIsHovered(true); // Restore overlay after leaving slider
+            }
+          }}
+          onTouchStart={() => {
+            setIsSliderHovered(true);
+            setIsHovered(false); // Hide overlay when slider is touched
+          }}
+          onTouchEnd={() => {
             setIsSliderHovered(false);
             if (!isDragging) {
               setIsHovered(true); // Restore overlay after leaving slider
