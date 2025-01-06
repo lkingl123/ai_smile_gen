@@ -10,12 +10,14 @@ import {
   FaTabletAlt,
 } from "react-icons/fa";
 import { motion, useAnimation } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import Slider from "./components/Slider"
 
 export default function HomePage() {
   const controls = useAnimation();
+  const [sliderPosition, setSliderPosition] = useState(50);
 
   useEffect(() => {
     const sequence = async () => {
@@ -32,6 +34,16 @@ export default function HomePage() {
     };
     sequence();
   }, [controls]);
+
+  const handleDrag = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget
+      .closest(".slider-container")!
+      .getBoundingClientRect();
+    const newPosition = ((e.clientX - rect.left) / rect.width) * 100;
+    if (newPosition >= 0 && newPosition <= 100) {
+      setSliderPosition(newPosition);
+    }
+  };
 
   // Animation Variants for Smooth Transitions
   const heroVariants = {
@@ -77,7 +89,7 @@ export default function HomePage() {
             <span className="text-blue-dark text-3xl md:text-5xl font-extrabold mt-4">
               Software
             </span>
-          </div> 
+          </div>
           <p className="text-xl text-gray-400 text-center">
             AI dental software to close patients faster
           </p>
@@ -135,7 +147,7 @@ export default function HomePage() {
 
       {/* Feature Section 1 */}
       <motion.section
-        className="relative bg-gradient-to-r from-blue-dark to-blue-500 py-16 w-full rounded-bl-[180px] ml-6 md:ml-48"
+        className="relative bg-gradient-to-r from-blue-dark to-blue-400 py-16 w-full rounded-bl-[180px] ml-6 md:ml-48 mb-28"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }} // Ensures it animates only once when in view
@@ -176,7 +188,23 @@ export default function HomePage() {
           </div>
         </div>
       </motion.section>
-      
+
+      {/* Feature Section 2 */}
+      <section className="relative bg-gradient-to-r from-blue-dark to-blue-400 py-16 w-full rounded-r-[180px]">
+        <div className="max-w-7xl mx-auto px-4 md:px-12 flex flex-col items-center text-center">
+          <h2 className="text-3xl md:text-5xl font-extrabold text-white mb-6">
+            Smile generation software to increase close rates
+          </h2>
+          <p className="text-white text-base md:text-lg max-w-2xl mb-10">
+            In 15 seconds or less, our AI Smile Generator will produce a series
+            of 4 renders to choose from with no manual editing needed.
+          </p>
+
+         <Slider />
+
+        </div>
+      </section>
+
       <Footer />
     </main>
   );
