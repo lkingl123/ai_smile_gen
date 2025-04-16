@@ -3,7 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 import { getIdToken, onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebaseConfig";
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
 
 export default function SmileCam() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -124,19 +129,24 @@ export default function SmileCam() {
           {loading && (
             <div className="mt-6 text-center flex flex-col items-center">
               <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
-              <p className="text-sm text-gray-600 mt-3">Uploading and preparing your photo...</p>
+              <p className="text-sm text-gray-600 mt-3">
+                Uploading and preparing your photo...
+              </p>
             </div>
           )}
 
           {capturedImage && !loading && (
             <div className="mt-6 text-center">
-              <p className="text-sm text-gray-600 mb-2">Here's your captured smile:</p>
-              <img
-                src={capturedImage}
-                alt="Captured Smile"
-                className="max-w-full rounded border object-cover"
-                style={{ maxHeight: "400px", width: "auto" }}
-              />
+              <p className="text-sm text-gray-600 mb-2">
+                Here's your captured smile:
+              </p>
+              <div className="w-full max-w-md aspect-[3/4] rounded-xl overflow-hidden border border-gray-300 shadow-md">
+                <img
+                  src={capturedImage}
+                  alt="Captured Smile"
+                  className="w-full h-full object-cover"
+                />
+              </div>
               <button
                 onClick={handleRetake}
                 className="mt-4 text-sm text-red-500 underline"
