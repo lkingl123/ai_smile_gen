@@ -1,8 +1,8 @@
-"use client";
-
 import { useEffect, useRef, useState } from "react";
 import { getIdToken, onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebaseConfig";
+import { getStorage, ref, uploadBytesResumable } from "firebase/storage";
+import { getDownloadURL } from "firebase/storage"; // Import getDownloadURL separately
 
 export default function SmileCam() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -13,6 +13,8 @@ export default function SmileCam() {
   const [loading, setLoading] = useState(false);
   const [enhancedImage, setEnhancedImage] = useState<string | null>(null);
   const [viewed, setViewed] = useState(false);
+
+  const storage = getStorage(); // Initialize Firebase Storage
 
   // 🔒 Monitor Firebase Auth
   useEffect(() => {
@@ -43,7 +45,7 @@ export default function SmileCam() {
       });
   }, []);
 
-  // 📸 Capture Photo and Send
+  // 📸 Capture Photo and Send to Firebase
   const captureAndProcess = async () => {
     if (!videoRef.current || !canvasRef.current || !authToken) return;
 
@@ -57,29 +59,36 @@ export default function SmileCam() {
     canvasRef.current.toBlob(async (blob) => {
       if (!blob) return;
 
-      const formData = new FormData();
-      formData.append("image", blob);
+      // Generate unique filename for the image (teeth-<timestamp>.jpg)
+      const filename = `teeth-${Date.now()}.jpg`;
+      
+      // Upload the captured image directly to Firebase Storage
+      const storageRef = ref(storage, `uploads/${filename}`); // Store with unique filename
+      const uploadTask = uploadBytesResumable(storageRef, blob);
 
-      try {
-        const res = await fetch("/api/process-image", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-          body: formData,
-        });
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          // Monitor upload progress if needed
+        },
+        (error: unknown) => {
+          if (error instanceof Error) {
+            console.error("Upload error:", error.message);
+          } else {
+            console.error("Unknown upload error");
+          }
+        },
+        () => {
+          console.log("Upload successful");
 
-        if (res.ok) {
-          const { enhancedImageUrl } = await res.json();
-          setEnhancedImage(enhancedImageUrl);
-        } else {
-          alert("Failed to enhance image");
+          // Fetch the download URL using getDownloadURL from the modular SDK
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL: string) => {
+            setEnhancedImage(downloadURL); // Set the uploaded image URL
+          }).catch((error) => {
+            console.error("Error getting download URL:", error);
+          });
         }
-      } catch (err) {
-        console.error("Upload error:", err);
-      } finally {
-        setLoading(false);
-      }
+      );
     }, "image/jpeg");
   };
 
