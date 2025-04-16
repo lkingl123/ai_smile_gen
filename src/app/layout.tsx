@@ -24,14 +24,7 @@ export const metadata: Metadata = {
     title: "Smile Generation Software - AI Smile Gen",
     description: "Visualize your perfect smile with our cutting-edge dental simulation tool.",
     url: "https://aismilegen.vercel.app/", 
-    images: [
-      {
-        url: "/logo_words.png", // Path to your image in the public folder
-        width: 1200, // Recommended width
-        height: 630, // Recommended height
-        alt: "Smile Generation Software Logo", // Alt text for accessibility
-      },
-    ],
+    siteName: "AI Smile Gen",
   },
 };
 
