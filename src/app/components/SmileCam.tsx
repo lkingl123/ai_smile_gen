@@ -16,8 +16,9 @@ export default function SmileCam() {
 
   const [user, setUser] = useState<any>(null);
   const [authToken, setAuthToken] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false); // for loading spinner
+  const [loading, setLoading] = useState(false);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  const [showCamera, setShowCamera] = useState(true); // ✅ track whether camera should show
 
   const storage = getStorage();
 
@@ -38,6 +39,8 @@ export default function SmileCam() {
 
   // 📷 Setup Camera
   useEffect(() => {
+    if (!showCamera) return;
+
     navigator.mediaDevices
       .getUserMedia({ video: true })
       .then((stream) => {
@@ -48,13 +51,14 @@ export default function SmileCam() {
       .catch((err) => {
         console.error("Camera error", err);
       });
-  }, []);
+  }, [showCamera]);
 
-  // 📸 Capture Photo and Upload
+  // 📸 Capture & Upload
   const handleCapture = async () => {
     if (!videoRef.current || !canvasRef.current || !authToken) return;
 
     setLoading(true);
+    setShowCamera(false); // hide camera after capture
 
     const ctx = canvasRef.current.getContext("2d");
     canvasRef.current.width = videoRef.current.videoWidth;
@@ -76,7 +80,6 @@ export default function SmileCam() {
           try {
             const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
 
-            // Simulate loading UI
             setTimeout(() => {
               setCapturedImage(downloadURL);
               setLoading(false);
@@ -90,18 +93,21 @@ export default function SmileCam() {
     }, "image/jpeg");
   };
 
+  // 🔁 Reset back to camera
   const handleRetake = () => {
     setCapturedImage(null);
     setLoading(false);
+    setShowCamera(true);
   };
 
   return (
-    <div className="flex flex-col items-center p-4 bg-white rounded-xl shadow-md w-full">
+    <div className="flex flex-col items-center">
       {!user ? (
         <p className="text-red-600">Please log in to take a photo.</p>
       ) : (
         <>
-          {!capturedImage && !loading && (
+          {/* 📸 CAMERA VIEW */}
+          {showCamera && !loading && (
             <>
               <div className="relative w-full max-w-md aspect-[3/4] rounded-xl overflow-hidden border border-gray-300 shadow-md">
                 <video
@@ -117,7 +123,7 @@ export default function SmileCam() {
 
               <button
                 onClick={handleCapture}
-                className="mt-4 px-6 py-3 bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-700 transition"
+                className="mt-5 px-6 py-3 bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-700 transition"
               >
                 Capture
               </button>
@@ -126,15 +132,17 @@ export default function SmileCam() {
             </>
           )}
 
+          {/* 🔄 LOADING STATE */}
           {loading && (
-            <div className="mt-6 text-center flex flex-col items-center">
+            <div className="flex flex-col items-center justify-center h-[500px]">
               <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
-              <p className="text-sm text-gray-600 mt-3">
+              <p className="text-sm font-medium text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-cyan-500 mt-6">
                 Uploading and preparing your photo...
               </p>
             </div>
           )}
 
+          {/* ✅ RESULT VIEW */}
           {capturedImage && !loading && (
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600 mb-2">
@@ -147,9 +155,10 @@ export default function SmileCam() {
                   className="w-full h-full object-cover"
                 />
               </div>
+
               <button
                 onClick={handleRetake}
-                className="mt-4 text-sm text-red-500 underline"
+                className="mt-5 px-5 py-2 bg-red-100 text-sm text-red-700 rounded-full border border-red-300 hover:bg-red-300 transition"
               >
                 Retake Photo
               </button>
