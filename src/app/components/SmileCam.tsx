@@ -42,7 +42,13 @@ export default function SmileCam() {
     if (!showCamera) return;
 
     navigator.mediaDevices
-      .getUserMedia({ video: true })
+      .getUserMedia({
+        video: {
+          width: { ideal: 1280 },
+          height: { ideal: 720 },
+        },
+      })
+
       .then((stream) => {
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
