@@ -40,24 +40,33 @@ export default function SmileCam() {
   // 📷 Setup Camera
   useEffect(() => {
     if (!showCamera) return;
-
+  
     navigator.mediaDevices
       .getUserMedia({
         video: {
-          width: { ideal: 1280 },
-          height: { ideal: 720 },
+          width: { ideal: 9999 },
+          height: { ideal: 9999 },
         },
       })
-
       .then((stream) => {
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
+  
+          videoRef.current.onloadedmetadata = () => {
+            console.log(
+              "[📷 Video Feed] Max resolution negotiated:",
+              videoRef.current?.videoWidth,
+              "x",
+              videoRef.current?.videoHeight
+            );
+          };
         }
       })
       .catch((err) => {
         console.error("Camera error", err);
       });
   }, [showCamera]);
+  
 
   // 📸 Capture & Upload
   const handleCapture = async () => {
