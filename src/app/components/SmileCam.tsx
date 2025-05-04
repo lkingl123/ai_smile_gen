@@ -119,7 +119,7 @@ export default function SmileCam() {
     setSubmittedForEnhancement(true);
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_PYTHON_BACKEND_URL}/generate`, {
+      const response = await fetch(`${process.env.PYTHON_BACKEND_URL}/generate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
