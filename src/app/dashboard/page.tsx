@@ -5,15 +5,6 @@ import { useFirebaseAuth } from "../context/FirebaseAuthContext";
 import ProtectedRoute from "../components/ProtectedRoute";
 import SmileCam from "../components/SmileCam";
 
-function Footer() {
-  return (
-    <footer className="w-full py-6 bg-gray-100 text-center text-sm text-gray-600 border-t-2 border-gray-300">
-      &copy; 2023 AI Smile. All Rights Reserved. Designed, Built & Maintained by
-      DIG
-    </footer>
-  );
-}
-
 export default function DashboardPage() {
   const { signOut } = useFirebaseAuth();
   const router = useRouter();
@@ -45,7 +36,6 @@ export default function DashboardPage() {
 
           <SmileCam />
         </section>
-        <Footer />
       </main>
     </ProtectedRoute>
   );
