@@ -185,7 +185,7 @@ export default function SmileCam() {
                 />
               </div>
 
-              <div className="flex justify-center gap-4 mt-4">
+              <div className="flex justify-center gap-4 mt-2">
                 <button
                   onClick={handleRetake}
                   className="px-5 py-2 bg-red-100 text-sm text-red-700 rounded-full border border-red-300 hover:bg-red-300 transition"
