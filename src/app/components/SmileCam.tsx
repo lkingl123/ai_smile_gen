@@ -139,7 +139,7 @@ export default function SmileCam() {
                   playsInline
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-x-0 top-[20%] flex items-center justify-center pointer-events-none">
+                <div className="absolute inset-x-0 top-[10%] flex items-center justify-center pointer-events-none">
                   <img src="silhouette.png" alt="Silhouette Overlay" />
                 </div>
               </div>
