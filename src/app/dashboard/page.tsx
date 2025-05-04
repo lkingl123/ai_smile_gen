@@ -1,3 +1,5 @@
+"use client";
+
 import { useRouter } from "next/navigation";
 import { useFirebaseAuth } from "../context/FirebaseAuthContext";
 import ProtectedRoute from "../components/ProtectedRoute";
