@@ -119,17 +119,22 @@ export default function SmileCam() {
     setSubmittedForEnhancement(true);
 
     try {
-      const response = await fetch("/api/enhance-image", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_PYTHON_BACKEND_URL}/generate`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ imageUrl: capturedImage, uid: user.uid }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          image_url: capturedImage,
+          uid: user?.uid,
+        }),
       });
 
       const result = await response.json();
-      if (response.ok) {
-        setEnhancedImage(result.enhancedImageUrl);
+      if (response.ok && result.enhanced_image_url) {
+        setEnhancedImage(result.enhanced_image_url);
       } else {
-        console.error("Enhancement error:", result.error);
+        console.error("Enhancement error:", result.error || "Unknown error");
       }
     } catch (err) {
       console.error("Backend error:", err);
