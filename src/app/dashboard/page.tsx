@@ -26,7 +26,7 @@ export default function DashboardPage() {
               onClick={handleSignOut}
               className="absolute right-0 bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600 transition"
             >
-              Sign Out
+              ❌
             </button>
           </div>
 

@@ -18,8 +18,20 @@
 }
 
 /* Apply Poppins as the default font */
+/* Existing styles */
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: 'Poppins', Arial, Helvetica, sans-serif;
+
+  /* 🔒 Lock scrolling */
+  height: 100vh;
+  overflow: hidden;
+  margin: 0;
+}
+
+/* 🧱 Ensure html follows suit */
+html {
+  height: 100vh;
+  overflow: hidden;
 }
