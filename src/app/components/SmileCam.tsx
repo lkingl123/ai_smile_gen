@@ -142,14 +142,14 @@ export default function SmileCam() {
                 <div className="absolute inset-x-0 top-[10%] flex items-center justify-center pointer-events-none">
                   <img src="silhouette.png" alt="Silhouette Overlay" />
                 </div>
+                <button
+                  onClick={handleCapture}
+                  className="absolute bottom-5 left-1/2 transform -translate-x-1/2 text-3xl bg-white border-4 border-red-400 w-16 h-16 rounded-full shadow-md hover:scale-105 active:scale-95 transition-transform flex items-center justify-center"
+                  aria-label="Capture"
+                >
+                  📸
+                </button>
               </div>
-
-              <button
-                onClick={handleCapture}
-                className="mt-5 px-6 py-3 bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-700 transition"
-              >
-                Capture
-              </button>
 
               <canvas ref={canvasRef} className="hidden" />
             </>
