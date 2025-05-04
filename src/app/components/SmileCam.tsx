@@ -159,7 +159,6 @@ export default function SmileCam() {
                   📸
                 </button>
               </div>
-
               <canvas ref={canvasRef} className="hidden" />
             </>
           )}
@@ -173,7 +172,7 @@ export default function SmileCam() {
             </div>
           )}
 
-          {capturedImage && !enhancedImage && (
+          {capturedImage && !enhancedImage && !isProcessing && (
             <div className="mt-6 text-center w-full">
               <p className="text-sm text-gray-600 mb-2">
                 If you're satisfied with the photo, hit submit.
