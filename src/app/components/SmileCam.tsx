@@ -119,16 +119,17 @@ export default function SmileCam() {
     setSubmittedForEnhancement(true);
 
     try {
-      const response = await fetch(`${process.env.PYTHON_BACKEND_URL}/generate`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_PYTHON_BACKEND_URL}/generate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          image_url: capturedImage,
+          imageUrl: capturedImage,
           uid: user?.uid,
         }),
       });
+      
 
       const result = await response.json();
       if (response.ok && result.enhanced_image_url) {
