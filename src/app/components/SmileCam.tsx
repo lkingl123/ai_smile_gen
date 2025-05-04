@@ -203,9 +203,9 @@ export default function SmileCam() {
           )}
 
           {isProcessing && (
-            <div className="mt-6 flex flex-col items-center">
+            <div className="w-full max-w-md h-[500px] flex flex-col items-center justify-center bg-white border border-gray-300 rounded-xl shadow-md p-4 mt-6">
               <div className="animate-spin rounded-full h-10 w-10 border-4 border-blue-500 border-t-transparent"></div>
-              <p className="text-sm mt-2 text-blue-600 font-medium">
+              <p className="text-sm mt-4 text-blue-600 font-medium">
                 Enhancing smile...
               </p>
             </div>
