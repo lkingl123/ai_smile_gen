@@ -16,10 +16,10 @@ export default function DashboardPage() {
 
   return (
     <ProtectedRoute>
-      <main className="min-h-screen bg-blue-50 flex flex-col items-center justify-between">
-        <section className="w-full max-w-lg p-6 border border-gray-200 rounded-lg bg-white mt-20 mb-8 relative">
+      <main className="h-screen w-full bg-blue-50 flex items-center justify-center overflow-hidden px-4">
+        <section className="w-full max-w-md bg-white border border-gray-200 rounded-lg p-4 sm:p-6 shadow-lg relative">
           <div className="relative mb-4 flex items-center justify-center">
-            <h2 className="text-2xl font-bold text-gray-800 text-center w-full">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-800 text-center w-full">
               Snap a Smile
             </h2>
             <button
