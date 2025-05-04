@@ -18,12 +18,15 @@ export async function POST(req: Request) {
     const response = await fetch(`${PYTHON_BACKEND_URL}/generate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ imageUrl, uid }), // ✅ include uid
+      body: JSON.stringify({
+        image_url: imageUrl, // ✅ correct snake_case key for Python
+        uid,
+      }),
     });
 
     if (!response.ok) {
-      const errorResponse = await response.json();
-      console.error("Python Backend Error:", errorResponse);
+      const errorText = await response.text(); // log full raw response
+      console.error("Python Backend Error:", errorText);
       return NextResponse.json(
         { error: "Failed to enhance the image." },
         { status: 500 }

@@ -18,6 +18,7 @@ export default function SmileCam() {
   const [authToken, setAuthToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  const [enhancedImage, setEnhancedImage] = useState<string | null>(null);
   const [showCamera, setShowCamera] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -90,27 +91,10 @@ export default function SmileCam() {
           try {
             const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
             setCapturedImage(downloadURL);
-            setLoading(false);
-            setIsProcessing(true);
-
-            const response = await fetch("/api/enhance-image", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ imageUrl: downloadURL, uid: user.uid }),
-            });
-
-            const result = await response.json();
-
-            if (response.ok) {
-              setCapturedImage(result.enhancedImageUrl);
-            } else {
-              console.error("Enhancement error:", result.error);
-            }
-
-            setIsProcessing(false);
           } catch (err) {
-            console.error("Backend error:", err);
-            setIsProcessing(false);
+            console.error("Download URL error:", err);
+          } finally {
+            setLoading(false);
           }
         }
       );
@@ -119,9 +103,34 @@ export default function SmileCam() {
 
   const handleRetake = () => {
     setCapturedImage(null);
+    setEnhancedImage(null);
     setLoading(false);
     setIsProcessing(false);
     setShowCamera(true);
+  };
+
+  const handleSubmitEnhancement = async () => {
+    if (!capturedImage || !user) return;
+
+    setIsProcessing(true);
+    try {
+      const response = await fetch("/api/enhance-image", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ imageUrl: capturedImage, uid: user.uid }),
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        setEnhancedImage(result.enhancedImageUrl);
+      } else {
+        console.error("Enhancement error:", result.error);
+      }
+    } catch (err) {
+      console.error("Backend error:", err);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   return (
@@ -164,17 +173,54 @@ export default function SmileCam() {
             </div>
           )}
 
-          {capturedImage && (
-            <div className="mt-6 text-center">
+          {capturedImage && !enhancedImage && (
+            <div className="mt-6 text-center w-full">
               <p className="text-sm text-gray-600 mb-2">
-                {isProcessing
-                  ? "Enhancing with AI... hang tight!"
-                  : "Here's your enhanced smile:"}
+                If you're satisfied with the photo, hit submit.
               </p>
-              <div className="w-full max-w-md aspect-[3/4] rounded-xl overflow-hidden border border-gray-300 shadow-md">
+              <div className="w-full max-w-md aspect-[3/4] rounded-xl overflow-hidden border border-gray-300 shadow-md mx-auto">
                 <img
                   src={capturedImage}
                   alt="Smile Preview"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              <div className="flex justify-center gap-4 mt-4">
+                <button
+                  onClick={handleRetake}
+                  className="px-5 py-2 bg-red-100 text-sm text-red-700 rounded-full border border-red-300 hover:bg-red-300 transition"
+                >
+                  Retake Photo
+                </button>
+                <button
+                  onClick={handleSubmitEnhancement}
+                  className="px-5 py-2 bg-blue-600 text-white text-sm rounded-full hover:bg-blue-700 transition"
+                >
+                  Submit
+                </button>
+              </div>
+            </div>
+          )}
+
+          {isProcessing && (
+            <div className="mt-6 flex flex-col items-center">
+              <div className="animate-spin rounded-full h-10 w-10 border-4 border-blue-500 border-t-transparent"></div>
+              <p className="text-sm mt-2 text-blue-600 font-medium">
+                Enhancing smile...
+              </p>
+            </div>
+          )}
+
+          {enhancedImage && (
+            <div className="mt-6 text-center">
+              <p className="text-sm text-gray-600 mb-2">
+                Here's your enhanced smile:
+              </p>
+              <div className="w-full max-w-md aspect-[3/4] rounded-xl overflow-hidden border border-gray-300 shadow-md mx-auto">
+                <img
+                  src={enhancedImage}
+                  alt="Enhanced Smile"
                   className="w-full h-full object-cover"
                 />
               </div>
