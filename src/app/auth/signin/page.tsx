@@ -6,13 +6,6 @@ import { auth } from '../../firebaseConfig'; // Adjust path as needed
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-function Footer() {
-  return (
-    <footer className="w-full py-6 bg-gray-100 text-center text-sm text-gray-600 border-t-2 border-gray-300">
-      &copy; 2023 AI Smile. All Rights Reserved. Designed, Built & Maintained by DIG
-    </footer>
-  );
-}
 
 function SignInPageContent() {
   const [email, setEmail] = useState('');
@@ -177,7 +170,6 @@ function SignInPageContent() {
           </div>
         </div>
       </div>
-      <Footer />
     </main>
   );
 }
