@@ -21,6 +21,7 @@ export default function SmileCam() {
   const [enhancedImage, setEnhancedImage] = useState<string | null>(null);
   const [showCamera, setShowCamera] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [submittedForEnhancement, setSubmittedForEnhancement] = useState(false);
 
   const storage = getStorage();
 
@@ -67,6 +68,7 @@ export default function SmileCam() {
 
     setLoading(true);
     setShowCamera(false);
+    setSubmittedForEnhancement(false);
 
     const ctx = canvasRef.current.getContext("2d");
     canvasRef.current.width = videoRef.current.videoWidth;
@@ -106,6 +108,7 @@ export default function SmileCam() {
     setEnhancedImage(null);
     setLoading(false);
     setIsProcessing(false);
+    setSubmittedForEnhancement(false);
     setShowCamera(true);
   };
 
@@ -113,6 +116,8 @@ export default function SmileCam() {
     if (!capturedImage || !user) return;
 
     setIsProcessing(true);
+    setSubmittedForEnhancement(true);
+
     try {
       const response = await fetch("/api/enhance-image", {
         method: "POST",
@@ -134,7 +139,7 @@ export default function SmileCam() {
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center px-4">
       {!user ? (
         <p className="text-red-600">Please log in to take a photo.</p>
       ) : (
@@ -172,7 +177,7 @@ export default function SmileCam() {
             </div>
           )}
 
-          {capturedImage && !enhancedImage && !isProcessing && (
+          {capturedImage && !enhancedImage && !submittedForEnhancement && (
             <div className="mt-6 text-center w-full">
               <p className="text-sm text-gray-600 mb-2">
                 If you're satisfied with the photo, hit submit.
@@ -202,7 +207,7 @@ export default function SmileCam() {
             </div>
           )}
 
-          {isProcessing && (
+          {submittedForEnhancement && isProcessing && (
             <div className="w-full max-w-md h-[500px] flex flex-col items-center justify-center bg-white border border-gray-300 rounded-xl shadow-md p-4 mt-6">
               <div className="animate-spin rounded-full h-10 w-10 border-4 border-blue-500 border-t-transparent"></div>
               <p className="text-sm mt-4 text-blue-600 font-medium">
