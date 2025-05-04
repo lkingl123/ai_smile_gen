@@ -18,11 +18,11 @@ export default function SmileCam() {
   const [authToken, setAuthToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
-  const [showCamera, setShowCamera] = useState(true); // ✅ track whether camera should show
+  const [showCamera, setShowCamera] = useState(true);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const storage = getStorage();
 
-  // 🔒 Monitor Firebase Auth
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
@@ -37,24 +37,20 @@ export default function SmileCam() {
     return () => unsubscribe();
   }, []);
 
-  // 📷 Setup Camera
   useEffect(() => {
     if (!showCamera) return;
-  
+
     navigator.mediaDevices
       .getUserMedia({
-        video: {
-          width: { ideal: 9999 },
-          height: { ideal: 9999 },
-        },
+        video: { width: { ideal: 9999 }, height: { ideal: 9999 } },
       })
       .then((stream) => {
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
-  
+
           videoRef.current.onloadedmetadata = () => {
             console.log(
-              "[📷 Video Feed] Max resolution negotiated:",
+              "[📷 Video Feed] Resolution:",
               videoRef.current?.videoWidth,
               "x",
               videoRef.current?.videoHeight
@@ -62,18 +58,14 @@ export default function SmileCam() {
           };
         }
       })
-      .catch((err) => {
-        console.error("Camera error", err);
-      });
+      .catch((err) => console.error("Camera error", err));
   }, [showCamera]);
-  
 
-  // 📸 Capture & Upload
   const handleCapture = async () => {
     if (!videoRef.current || !canvasRef.current || !authToken) return;
 
     setLoading(true);
-    setShowCamera(false); // hide camera after capture
+    setShowCamera(false);
 
     const ctx = canvasRef.current.getContext("2d");
     canvasRef.current.width = videoRef.current.videoWidth;
@@ -84,34 +76,51 @@ export default function SmileCam() {
       if (!blob) return;
 
       const filename = `teeth-${Date.now()}.jpg`;
-      const storageRef = ref(storage, `uploads/${filename}`);
+      const storageRef = ref(storage, `uploads/${user.uid}/${filename}`);
       const uploadTask = uploadBytesResumable(storageRef, blob);
 
       uploadTask.on(
         "state_changed",
         () => {},
-        (error) => console.error("Upload error:", error),
+        (error) => {
+          console.error("Upload error:", error);
+          setLoading(false);
+        },
         async () => {
           try {
             const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-
-            setTimeout(() => {
-              setCapturedImage(downloadURL);
-              setLoading(false);
-            }, 3000);
-          } catch (err) {
-            console.error("Download URL error:", err);
+            setCapturedImage(downloadURL);
             setLoading(false);
+            setIsProcessing(true);
+
+            const response = await fetch("/api/enhance-image", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ imageUrl: downloadURL, uid: user.uid }),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+              setCapturedImage(result.enhancedImageUrl);
+            } else {
+              console.error("Enhancement error:", result.error);
+            }
+
+            setIsProcessing(false);
+          } catch (err) {
+            console.error("Backend error:", err);
+            setIsProcessing(false);
           }
         }
       );
     }, "image/jpeg");
   };
 
-  // 🔁 Reset back to camera
   const handleRetake = () => {
     setCapturedImage(null);
     setLoading(false);
+    setIsProcessing(false);
     setShowCamera(true);
   };
 
@@ -121,7 +130,6 @@ export default function SmileCam() {
         <p className="text-red-600">Please log in to take a photo.</p>
       ) : (
         <>
-          {/* 📸 CAMERA VIEW */}
           {showCamera && !loading && (
             <>
               <div className="relative w-full max-w-md aspect-[3/4] rounded-xl overflow-hidden border border-gray-300 shadow-md">
@@ -147,7 +155,6 @@ export default function SmileCam() {
             </>
           )}
 
-          {/* 🔄 LOADING STATE */}
           {loading && (
             <div className="flex flex-col items-center justify-center h-[500px]">
               <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
@@ -157,16 +164,17 @@ export default function SmileCam() {
             </div>
           )}
 
-          {/* ✅ RESULT VIEW */}
-          {capturedImage && !loading && (
+          {capturedImage && (
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600 mb-2">
-                Here's your captured smile:
+                {isProcessing
+                  ? "Enhancing with AI... hang tight!"
+                  : "Here's your enhanced smile:"}
               </p>
               <div className="w-full max-w-md aspect-[3/4] rounded-xl overflow-hidden border border-gray-300 shadow-md">
                 <img
                   src={capturedImage}
-                  alt="Captured Smile"
+                  alt="Smile Preview"
                   className="w-full h-full object-cover"
                 />
               </div>
