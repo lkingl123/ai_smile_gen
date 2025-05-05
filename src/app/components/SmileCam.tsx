@@ -25,6 +25,7 @@ export default function SmileCam() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [submittedForEnhancement, setSubmittedForEnhancement] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [progress, setProgress] = useState<number>(0);
 
   const storage = getStorage();
 
@@ -114,6 +115,7 @@ export default function SmileCam() {
     setLoading(false);
     setIsProcessing(false);
     setSubmittedForEnhancement(false);
+    setProgress(0);
     setShowCamera(true);
     setErrorMessage(null);
   };
@@ -124,6 +126,18 @@ export default function SmileCam() {
     setIsProcessing(true);
     setSubmittedForEnhancement(true);
     setErrorMessage(null);
+    setProgress(0);
+
+    // Simulate progress to 80%
+    const interval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 80) {
+          clearInterval(interval);
+          return 80;
+        }
+        return prev + Math.random() * 2; // random step
+      });
+    }, 100);
 
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_PYTHON_BACKEND_URL}/generate`, {
@@ -139,15 +153,18 @@ export default function SmileCam() {
 
       const result = await response.json();
       if (response.ok && result.enhancedImageUrl) {
+        setProgress(100); // jump from 80 to 100
         setEnhancedImage(result.enhancedImageUrl);
       } else {
         const message = result.error || "Unknown error";
         console.error("Enhancement error:", message);
         setErrorMessage(message);
+        setProgress(0);
       }
     } catch (err) {
       console.error("Backend error:", err);
       setErrorMessage("Server error. Please try again.");
+      setProgress(0);
     } finally {
       setIsProcessing(false);
     }
@@ -196,11 +213,16 @@ export default function SmileCam() {
         )}
 
         {submittedForEnhancement && isProcessing && (
-          <div className="flex flex-col items-center justify-center w-full h-full">
-            <div className="animate-spin rounded-full h-10 w-10 border-4 border-blue-500 border-t-transparent"></div>
-            <p className="text-sm mt-4 text-blue-600 font-medium text-center px-4">
-              Enhancing smile...
+          <div className="flex flex-col items-center justify-center w-full h-full px-6">
+            <p className="text-sm font-medium text-blue-600 mb-2">
+              Enhancing Smile: {Math.floor(progress)}%
             </p>
+            <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-blue-500 transition-all duration-100 ease-in-out"
+                style={{ width: `${progress}%` }}
+              ></div>
+            </div>
           </div>
         )}
 
