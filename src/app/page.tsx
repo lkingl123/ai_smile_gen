@@ -68,7 +68,7 @@ export default function HomePage() {
   };
 
   return (
-    <main className="min-h-screen bg-light-blue flex flex-col items-center relative overflow-hidden pt-[80px] lg:pt-[180px]">
+    <main className="min-h-screen bg-light-blue flex flex-col items-center relative pt-[80px] lg:pt-[180px]">
       {/* Header */}
       <Header />
       {/* Hero Section */}
