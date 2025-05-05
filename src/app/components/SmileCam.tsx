@@ -234,7 +234,7 @@ export default function SmileCam() {
           />
           <button
             onClick={handleRetake}
-            className="px-4 py-1 text-sm bg-red-100 text-red-700 rounded-full border border-red-300 hover:bg-red-300"
+            className="mt-2 mb-1 px-4 py-1 text-sm bg-red-100 text-red-700 rounded-full border border-red-300 hover:bg-red-300"
           >
             Retake
           </button>
