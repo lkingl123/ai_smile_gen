@@ -22,7 +22,7 @@ export default function SmileCam() {
   const [showCamera, setShowCamera] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [submittedForEnhancement, setSubmittedForEnhancement] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null); // 👈 NEW
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const storage = getStorage();
 
@@ -69,7 +69,7 @@ export default function SmileCam() {
     setLoading(true);
     setShowCamera(false);
     setSubmittedForEnhancement(false);
-    setErrorMessage(null); // clear error on retry
+    setErrorMessage(null);
 
     const ctx = canvasRef.current.getContext("2d");
     canvasRef.current.width = videoRef.current.videoWidth;
@@ -152,115 +152,110 @@ export default function SmileCam() {
   };
 
   const getContent = () => {
-    if (showCamera && !loading) {
-      return (
-        <div className="relative w-full h-full">
-          <video
-            ref={videoRef}
-            autoPlay
-            playsInline
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-x-0 top-[16%] flex items-center justify-center pointer-events-none">
-            <img src="silhouette.png" alt="Silhouette Overlay" />
+    return (
+      <div className="w-full aspect-[3/4] rounded-xl overflow-hidden border border-gray-300 shadow-md bg-white flex items-center justify-center relative">
+        {showCamera && !loading && (
+          <>
+            <video
+              ref={videoRef}
+              autoPlay
+              playsInline
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-x-0 top-[16%] flex items-center justify-center pointer-events-none">
+              <img src="silhouette.png" alt="Silhouette Overlay" />
+            </div>
+            <button
+              onClick={handleCapture}
+              className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-3xl bg-white border-4 border-red-400 w-16 h-16 rounded-full shadow-md hover:scale-105 active:scale-95 transition-transform flex items-center justify-center"
+              aria-label="Capture"
+            >
+              📸
+            </button>
+            <canvas ref={canvasRef} className="hidden" />
+          </>
+        )}
+
+        {loading && (
+          <div className="flex flex-col items-center justify-center w-full h-full">
+            <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
+            <p className="text-sm font-medium text-blue-500 mt-6 text-center px-4">
+              Uploading and preparing your photo...
+            </p>
           </div>
-          <button
-            onClick={handleCapture}
-            className="absolute bottom-5 left-1/2 transform -translate-x-1/2 text-3xl bg-white border-4 border-red-400 w-16 h-16 rounded-full shadow-md hover:scale-105 active:scale-95 transition-transform flex items-center justify-center"
-            aria-label="Capture"
-          >
-            📸
-          </button>
-          <canvas ref={canvasRef} className="hidden" />
-        </div>
-      );
-    }
+        )}
 
-    if (loading) {
-      return (
-        <div className="flex flex-col items-center justify-center w-full h-full">
-          <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
-          <p className="text-sm font-medium text-blue-500 mt-6">
-            Uploading and preparing your photo...
-          </p>
-        </div>
-      );
-    }
-
-    if (capturedImage && !enhancedImage && !submittedForEnhancement) {
-      return (
-        <div className="flex flex-col justify-between h-full w-full">
+        {capturedImage && !enhancedImage && !submittedForEnhancement && (
           <img
             src={capturedImage}
             alt="Smile Preview"
-            className="w-full h-full object-cover mb-2"
+            className="w-full h-full object-cover"
           />
-          <div className="flex justify-between mt-3 mb-2">
-            <button
-              onClick={handleRetake}
-              className="px-4 py-1 text-sm bg-red-100 text-red-700 rounded-full border border-red-300 hover:bg-red-300"
-            >
-              Retake
-            </button>
-            <button
-              onClick={handleSubmitEnhancement}
-              className="px-4 py-1 text-sm bg-blue-600 text-white rounded-full hover:bg-blue-700"
-            >
-              Submit
-            </button>
+        )}
+
+        {submittedForEnhancement && isProcessing && (
+          <div className="flex flex-col items-center justify-center w-full h-full">
+            <div className="animate-spin rounded-full h-10 w-10 border-4 border-blue-500 border-t-transparent"></div>
+            <p className="text-sm mt-4 text-blue-600 font-medium text-center px-4">
+              Enhancing smile...
+            </p>
           </div>
-        </div>
-      );
-    }
+        )}
 
-    if (submittedForEnhancement && isProcessing) {
-      return (
-        <div className="flex flex-col items-center justify-center w-full h-full">
-          <div className="animate-spin rounded-full h-10 w-10 border-4 border-blue-500 border-t-transparent"></div>
-          <p className="text-sm mt-4 text-blue-600 font-medium">
-            Enhancing smile...
-          </p>
-        </div>
-      );
-    }
-
-    if (enhancedImage) {
-      return (
-        <div className="flex flex-col justify-between h-full w-full">
+        {enhancedImage && (
           <img
             src={enhancedImage}
             alt="Enhanced Smile"
-            className="w-full h-full object-cover mb-2"
+            className="w-full h-full object-cover"
           />
-          <button
-            onClick={handleRetake}
-            className="mt-2 mb-1 px-4 py-1 text-sm bg-red-100 text-red-700 rounded-full border border-red-300 hover:bg-red-300"
-          >
-            Retake
-          </button>
-        </div>
-      );
-    }
-
-    return null;
+        )}
+      </div>
+    );
   };
 
   return (
-    <div className="flex flex-col items-center px-4">
+    <div className="flex flex-col items-center px-4 w-full max-w-md">
       {!user ? (
         <p className="text-red-600">Please log in to take a photo.</p>
       ) : (
         <>
           {errorMessage && (
-            <div className="w-full max-w-md mb-2 text-center">
+            <div className="w-full mb-2 text-center">
               <p className="text-sm text-red-600 bg-red-50 border border-red-200 px-3 py-2 rounded-lg">
                 ⚠️ {errorMessage}
               </p>
             </div>
           )}
-          <div className="w-full max-w-md aspect-[3/4] rounded-xl overflow-hidden border border-gray-300 shadow-md bg-white flex items-center justify-center p-4 pb-8">
-            {getContent()}
-          </div>
+
+          {getContent()}
+
+          {(capturedImage && !enhancedImage && !submittedForEnhancement) && (
+            <div className="flex justify-between w-full mt-4 px-2">
+              <button
+                onClick={handleRetake}
+                className="px-4 py-2 text-sm bg-red-100 text-red-700 rounded-full border border-red-300 hover:bg-red-300 w-[48%]"
+              >
+                Retake
+              </button>
+              <button
+                onClick={handleSubmitEnhancement}
+                className="px-4 py-2 text-sm bg-blue-600 text-white rounded-full hover:bg-blue-700 w-[48%]"
+              >
+                Submit
+              </button>
+            </div>
+          )}
+
+          {enhancedImage && (
+            <div className="flex justify-center w-full mt-4 px-2">
+              <button
+                onClick={handleRetake}
+                className="px-4 py-2 text-sm bg-red-100 text-red-700 rounded-full border border-red-300 hover:bg-red-300 w-full"
+              >
+                Retake
+              </button>
+            </div>
+          )}
         </>
       )}
     </div>
