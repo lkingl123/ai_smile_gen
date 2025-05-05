@@ -195,7 +195,7 @@ export default function SmileCam() {
             alt="Smile Preview"
             className="w-full h-full object-cover mb-2"
           />
-          <div className="flex justify-between mt-3">
+          <div className="flex justify-between mt-3 mb-2">
             <button
               onClick={handleRetake}
               className="px-4 py-1 text-sm bg-red-100 text-red-700 rounded-full border border-red-300 hover:bg-red-300"
