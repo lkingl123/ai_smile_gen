@@ -22,6 +22,7 @@ export default function SmileCam() {
   const [showCamera, setShowCamera] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [submittedForEnhancement, setSubmittedForEnhancement] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null); // 👈 NEW
 
   const storage = getStorage();
 
@@ -68,6 +69,7 @@ export default function SmileCam() {
     setLoading(true);
     setShowCamera(false);
     setSubmittedForEnhancement(false);
+    setErrorMessage(null); // clear error on retry
 
     const ctx = canvasRef.current.getContext("2d");
     canvasRef.current.width = videoRef.current.videoWidth;
@@ -87,6 +89,7 @@ export default function SmileCam() {
         (error) => {
           console.error("Upload error:", error);
           setLoading(false);
+          setErrorMessage("Upload failed. Please try again.");
         },
         async () => {
           try {
@@ -94,6 +97,7 @@ export default function SmileCam() {
             setCapturedImage(downloadURL);
           } catch (err) {
             console.error("Download URL error:", err);
+            setErrorMessage("Failed to retrieve uploaded image.");
           } finally {
             setLoading(false);
           }
@@ -109,6 +113,7 @@ export default function SmileCam() {
     setIsProcessing(false);
     setSubmittedForEnhancement(false);
     setShowCamera(true);
+    setErrorMessage(null);
   };
 
   const handleSubmitEnhancement = async () => {
@@ -116,6 +121,7 @@ export default function SmileCam() {
 
     setIsProcessing(true);
     setSubmittedForEnhancement(true);
+    setErrorMessage(null);
 
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_PYTHON_BACKEND_URL}/generate`, {
@@ -133,10 +139,13 @@ export default function SmileCam() {
       if (response.ok && result.enhancedImageUrl) {
         setEnhancedImage(result.enhancedImageUrl);
       } else {
-        console.error("Enhancement error:", result.error || "Unknown error");
+        const message = result.error || "Unknown error";
+        console.error("Enhancement error:", message);
+        setErrorMessage(message);
       }
     } catch (err) {
       console.error("Backend error:", err);
+      setErrorMessage("Server error. Please try again.");
     } finally {
       setIsProcessing(false);
     }
@@ -241,9 +250,18 @@ export default function SmileCam() {
       {!user ? (
         <p className="text-red-600">Please log in to take a photo.</p>
       ) : (
-        <div className="w-full max-w-md aspect-[3/4] rounded-xl overflow-hidden border border-gray-300 shadow-md bg-white flex items-center justify-center p-4">
-          {getContent()}
-        </div>
+        <>
+          {errorMessage && (
+            <div className="w-full max-w-md mb-2 text-center">
+              <p className="text-sm text-red-600 bg-red-50 border border-red-200 px-3 py-2 rounded-lg">
+                ⚠️ {errorMessage}
+              </p>
+            </div>
+          )}
+          <div className="w-full max-w-md aspect-[3/4] rounded-xl overflow-hidden border border-gray-300 shadow-md bg-white flex items-center justify-center p-4">
+            {getContent()}
+          </div>
+        </>
       )}
     </div>
   );
