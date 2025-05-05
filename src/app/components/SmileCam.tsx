@@ -132,8 +132,8 @@ export default function SmileCam() {
       
 
       const result = await response.json();
-      if (response.ok && result.enhanced_image_url) {
-        setEnhancedImage(result.enhanced_image_url);
+      if (response.ok && result.enhancedImageUrl) {
+        setEnhancedImage(result.enhancedImageUrl);
       } else {
         console.error("Enhancement error:", result.error || "Unknown error");
       }
