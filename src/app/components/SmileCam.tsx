@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { getIdToken, onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebaseConfig";
+import useNoScroll from "../../hooks/useNoScroll";
 import {
   getStorage,
   ref,
@@ -11,6 +12,7 @@ import {
 } from "firebase/storage";
 
 export default function SmileCam() {
+  useNoScroll();
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
