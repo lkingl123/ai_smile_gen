@@ -195,7 +195,7 @@ export default function SmileCam() {
             alt="Smile Preview"
             className="w-full h-full object-cover mb-2"
           />
-          <div className="flex justify-between">
+          <div className="flex justify-between mt-3">
             <button
               onClick={handleRetake}
               className="px-4 py-1 text-sm bg-red-100 text-red-700 rounded-full border border-red-300 hover:bg-red-300"
@@ -258,7 +258,7 @@ export default function SmileCam() {
               </p>
             </div>
           )}
-          <div className="w-full max-w-md aspect-[3/4] rounded-xl overflow-hidden border border-gray-300 shadow-md bg-white flex items-center justify-center p-4">
+          <div className="w-full max-w-md aspect-[3/4] rounded-xl overflow-hidden border border-gray-300 shadow-md bg-white flex items-center justify-center p-4 pb-8">
             {getContent()}
           </div>
         </>
