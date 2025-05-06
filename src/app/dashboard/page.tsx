@@ -20,7 +20,7 @@ export default function DashboardPage() {
       <section className="w-full max-w-md lg:pb-20 bg-white border border-gray-200 rounded-lg p-4 sm:p-6 pb-20 shadow-lg">
           <div className="relative mb-4 flex items-center justify-center">
             <h2 className="text-xl sm:text-2xl font-bold text-gray-800 text-center w-full">
-              Take A Selfie and SMILE! 😁
+              SMILE! 😁
             </h2>
             <button
               onClick={handleSignOut}
