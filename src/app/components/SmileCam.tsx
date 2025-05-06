@@ -181,9 +181,9 @@ export default function SmileCam() {
               playsInline
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-x-0 top-[16%] flex items-center justify-center pointer-events-none">
+            {/* <div className="absolute inset-x-0 top-[16%] flex items-center justify-center pointer-events-none">
               <img src="silhouette.png" alt="Silhouette Overlay" />
-            </div>
+            </div> */}
             <button
               onClick={handleCapture}
               className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-3xl bg-white border-4 border-red-400 w-16 h-16 rounded-full shadow-md hover:scale-105 active:scale-95 transition-transform flex items-center justify-center"
