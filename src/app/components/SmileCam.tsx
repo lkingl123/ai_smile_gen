@@ -131,13 +131,13 @@ export default function SmileCam() {
     // Simulate progress to 80%
     const interval = setInterval(() => {
       setProgress((prev) => {
-        if (prev >= 80) {
+        if (prev >= 90) {
           clearInterval(interval);
-          return 80;
+          return 90;
         }
-        return prev + Math.random() * 2; // random step
+        return prev + 0.5;
       });
-    }, 100);
+    }, 200); // Tick every 200ms to reach 90% in ~18 seconds
 
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_PYTHON_BACKEND_URL}/generate`, {

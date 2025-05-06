@@ -9,26 +9,25 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const [navLoading, setNavLoading] = useState(false); // For navigation loading
+  const [navLoading, setNavLoading] = useState(false);
 
-  // Handle navigation loading
+  // Trigger navigation spinner
   useEffect(() => {
-    setNavLoading(true); // Trigger spinner on navigation
+    setNavLoading(true);
     const timeout = setTimeout(() => {
-      setNavLoading(false); // Simulated loading duration
+      setNavLoading(false);
     }, 1000);
-    return () => clearTimeout(timeout); // Cleanup timeout
+    return () => clearTimeout(timeout);
   }, [pathname]);
 
+  // Redirect unauthenticated or unverified users
   useEffect(() => {
-    if (!authLoading && !user) {
-      // Redirect to the sign-in page if user is not authenticated
+    if (!authLoading && (!user || !user.emailVerified)) {
       router.replace("/auth/signin");
     }
   }, [user, authLoading, router]);
 
   if (authLoading || navLoading) {
-    // Show spinner during authentication or navigation loading
     return (
       <div className="fixed inset-0 bg-gradient-to-br from-teal-50 to-blue-100 z-50 flex items-center justify-center">
         <div className="loader">
@@ -50,21 +49,18 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
             animation: bounce 1.5s infinite ease-in-out;
           }
           .teal {
-            background-color: #38b2ac; /* Tailwind Teal 400 */
+            background-color: #38b2ac;
           }
           .blue {
-            background-color: #4299e1; /* Tailwind Blue 400 */
+            background-color: #4299e1;
             animation-delay: 0.3s;
           }
           .white {
-            background-color: #ffffff; /* White */
+            background-color: #ffffff;
             animation-delay: 0.6s;
           }
-
           @keyframes bounce {
-            0%,
-            80%,
-            100% {
+            0%, 80%, 100% {
               transform: scale(0);
             }
             40% {
@@ -76,8 +72,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     );
   }
 
-  if (!user) {
-    // Prevent rendering protected content when user is not authenticated
+  if (!user || !user.emailVerified) {
     return null;
   }
 
