@@ -1,11 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../firebaseConfig'; // Adjust path as needed
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from 'firebase/auth';
+import { auth } from '../../firebaseConfig';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-
 
 function SignUpPageContent() {
   const [email, setEmail] = useState('');
@@ -17,6 +19,7 @@ function SignUpPageContent() {
     password: false,
     confirmPassword: false,
   });
+
   const router = useRouter();
 
   const handleAuth = async (e?: React.FormEvent<HTMLFormElement>) => {
@@ -40,21 +43,30 @@ function SignUpPageContent() {
     }
 
     setInputErrors(newInputErrors);
-    if (hasError) {
-      return;
-    }
+    if (hasError) return;
 
     try {
       setMessage(null);
-      await createUserWithEmailAndPassword(auth, email, password);
-      setMessage({ type: 'success', text: 'Account created successfully! Redirecting...' });
-      setTimeout(() => router.push('/auth/signin'), 2000);
+
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+      // ✅ Send verification email
+      await sendEmailVerification(userCredential.user);
+
+      setMessage({
+        type: 'success',
+        text: 'Account created! A verification email has been sent. Please check your inbox.',
+      });
+
+      // ✅ Redirect to sign-in after short delay
+      setTimeout(() => router.push('/auth/signin'), 3000);
     } catch (error: any) {
       const errorMessages: Record<string, string> = {
         'auth/email-already-in-use': 'This email is already in use.',
         'auth/invalid-email': 'Invalid email address.',
         'auth/weak-password': 'Password should be at least 6 characters long.',
       };
+
       const errorMessage =
         errorMessages[error.code] || 'An unexpected error occurred. Please try again.';
       setMessage({ type: 'error', text: errorMessage });

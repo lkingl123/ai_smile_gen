@@ -1,19 +1,16 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../firebaseConfig'; // Adjust path as needed
+import { signInWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
+import { auth } from '../../firebaseConfig';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-
 
 function SignInPageContent() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
-  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(
-    null
-  );
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [inputErrors, setInputErrors] = useState({ email: false, password: false });
   const router = useRouter();
 
@@ -48,8 +45,19 @@ function SignInPageContent() {
     }
 
     try {
-      setMessage(null); // Clear previous messages
-      await signInWithEmailAndPassword(auth, email, password);
+      setMessage(null);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      if (!user.emailVerified) {
+        setMessage({
+          type: 'error',
+          text: 'Your email is not verified. A new verification link has been sent.',
+        });
+        await sendEmailVerification(user);
+        await auth.signOut();
+        return;
+      }
 
       if (rememberMe) {
         localStorage.setItem('rememberedEmail', email);
@@ -58,18 +66,24 @@ function SignInPageContent() {
       }
 
       setMessage({ type: 'success', text: 'Successfully logged in! Redirecting...' });
-      setTimeout(() => router.push('/dashboard'), 2000); // Redirect after success
+      setTimeout(() => router.push('/dashboard'), 2000);
     } catch (error: any) {
+      console.error("🔥 Auth Error:", error);
+
+      const firebaseCode = error?.code || '';
       const errorMessages: Record<string, string> = {
         'auth/user-not-found': 'No account found with this email address.',
         'auth/wrong-password': 'Incorrect password. Please try again.',
         'auth/invalid-email': 'Invalid email address. Please enter a valid email.',
-        'auth/too-many-requests':
-          'Too many unsuccessful login attempts. Please try again later.',
+        'auth/too-many-requests': 'Too many attempts. Try again later or reset your password.',
+        'auth/network-request-failed': 'Network error. Check your connection and try again.',
+        'auth/invalid-credential': 'No account found or password is incorrect.', 
       };
+      
 
-      const errorMessage =
-        errorMessages[error.code] || 'An unexpected error occurred. Please check your password or email.';
+      const fallback = 'An error occurred. Please double-check your email and password.';
+      const errorMessage = errorMessages[firebaseCode] || fallback;
+
       setMessage({ type: 'error', text: errorMessage });
     }
   };
@@ -157,7 +171,6 @@ function SignInPageContent() {
               </Link>
             </p>
 
-            {/* Messages Section */}
             {message && (
               <div
                 className={`mt-4 text-sm font-semibold text-center ${
