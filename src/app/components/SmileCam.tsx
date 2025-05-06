@@ -127,18 +127,20 @@ export default function SmileCam() {
     setSubmittedForEnhancement(true);
     setErrorMessage(null);
     setProgress(0);
-
-    // Simulate progress to 80%
+  
+    let isComplete = false;
+  
+    // Simulate progress to 90% over 18 seconds or until complete
     const interval = setInterval(() => {
       setProgress((prev) => {
-        if (prev >= 90) {
+        if (prev >= 90 || isComplete) {
           clearInterval(interval);
-          return 90;
+          return prev;
         }
-        return prev + 0.5;
+        return prev + 0.5; // Adjusted step size
       });
-    }, 200); // Tick every 200ms to reach 90% in ~18 seconds
-
+    }, 200); // 200ms tick (~18s to 90%)
+  
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_PYTHON_BACKEND_URL}/generate`, {
         method: "POST",
@@ -153,7 +155,18 @@ export default function SmileCam() {
 
       const result = await response.json();
       if (response.ok && result.enhancedImageUrl) {
-        setProgress(100); // jump from 80 to 100
+        isComplete = true;
+        // Animate from current progress to 100%
+        const finalInterval = setInterval(() => {
+          setProgress((prev) => {
+            if (prev >= 100) {
+              clearInterval(finalInterval);
+              return 100;
+            }
+            return prev + 2; // fast to 100
+          });
+        }, 60);
+  
         setEnhancedImage(result.enhancedImageUrl);
       } else {
         const message = result.error || "Unknown error";
