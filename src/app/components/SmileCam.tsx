@@ -122,24 +122,25 @@ export default function SmileCam() {
 
   const handleSubmitEnhancement = async () => {
     if (!capturedImage || !user) return;
-
+  
     setIsProcessing(true);
     setSubmittedForEnhancement(true);
     setErrorMessage(null);
     setProgress(0);
   
-    let isComplete = false;
+    let backendDone = false;
+    let enhancedUrl: string | null = null;
   
-    // Simulate progress to 90% over 18 seconds or until complete
-    const interval = setInterval(() => {
+    // Phase 1: Animate 0% to 90% slowly over ~18s
+    const slowInterval = setInterval(() => {
       setProgress((prev) => {
-        if (prev >= 90 || isComplete) {
-          clearInterval(interval);
+        if (prev >= 90 || backendDone) {
+          clearInterval(slowInterval);
           return prev;
         }
-        return prev + 0.5; // Adjusted step size
+        return prev + 0.5;
       });
-    }, 200); // 200ms tick (~18s to 90%)
+    }, 200);
   
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_PYTHON_BACKEND_URL}/generate`, {
@@ -152,36 +153,38 @@ export default function SmileCam() {
           uid: user?.uid,
         }),
       });
-
+  
       const result = await response.json();
+  
       if (response.ok && result.enhancedImageUrl) {
-        isComplete = true;
-        // Animate from current progress to 100%
-        const finalInterval = setInterval(() => {
+        backendDone = true;
+        enhancedUrl = result.enhancedImageUrl;
+  
+        // Phase 2: Animate from current progress to 100%
+        const fastTo100 = setInterval(() => {
           setProgress((prev) => {
             if (prev >= 100) {
-              clearInterval(finalInterval);
+              clearInterval(fastTo100);
+              setTimeout(() => {
+                setEnhancedImage(enhancedUrl!);
+                setIsProcessing(false);
+              }, 300); // small delay for polish
               return 100;
             }
-            return prev + 2; // fast to 100
+            return prev + 2.5;
           });
-        }, 60);
-  
-        setEnhancedImage(result.enhancedImageUrl);
+        }, 40);
       } else {
-        const message = result.error || "Unknown error";
-        console.error("Enhancement error:", message);
-        setErrorMessage(message);
-        setProgress(0);
+        throw new Error(result.error || "Unknown error");
       }
     } catch (err) {
       console.error("Backend error:", err);
       setErrorMessage("Server error. Please try again.");
       setProgress(0);
-    } finally {
       setIsProcessing(false);
     }
   };
+  
 
   const getContent = () => {
     return (
